@@ -53,7 +53,7 @@ do_install_append () {
 	install -m 444 ${WORKDIR}/face_label.txt ${D}${OBJECT_DETECTION_DEMO_INSTALL_DIRECTORY}
 	install -m 555 ${B}/object_detection_demo ${D}${OBJECT_DETECTION_DEMO_INSTALL_DIRECTORY}
 
-	if echo "${BBLAYERS}" | grep -wq "meta-demos-desktop-common" ; then
+	if echo "${BBLAYERS}" | grep -wq "meta-ai-demos-common" ; then
 		install -d ${D}${OBJECT_DETECTION_DEMO_INSTALL_DIRECTORY}/icons
 		install -d ${D}${OBJECT_DETECTION_DEMO_INSTALL_DIRECTORY}/scripts
 		install -m 444 ${WORKDIR}/icons/* ${D}${OBJECT_DETECTION_DEMO_INSTALL_DIRECTORY}/icons

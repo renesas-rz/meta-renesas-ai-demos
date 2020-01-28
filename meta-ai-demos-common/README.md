@@ -1,8 +1,10 @@
 # meta-object-detection-demo-env
-This OpenEmbedded/Yocto layer adds a desktop background and icon launchers to the RZ/G2M HiHope Linux platform.
+This OpenEmbedded/Yocto layer adds a desktop background and icon launchers to
+the RZ/G2 reference platforms.
 
 Supported Platforms:
-- Renesas RZ/G2M hihope-rzg2m
+- Renesas RZ/G2M hihope-rzg2m from Hoperun
+- Renesas RZ/G2E ek874 from Silicon Linux
 
 
 ## Build Instructions
@@ -41,9 +43,9 @@ git checkout -b tmp c1b0c9f546289b1592d7a895640de103723a0305
 cd $WORK/meta-rzg2
 git checkout -b tmp BSP-1.0.1-update1
 cd $WORK/meta-renesas-ai
-git checkout -b tmp v3.1.1
+git checkout -b tmp v3.2.0
 cd $WORK/meta-renesas-ai-demos
-git checkout -b tmp OD_v1.0
+git checkout -b tmp master
 ```
 
 3. Download proprietary software packages from RZ/G Marketplace
@@ -74,7 +76,7 @@ source poky/oe-init-build-env
 
 6. Copy build configuration files
 ```
-cp $WORK/meta-renesas-ai-demos/meta-demos-desktop-common/templates/<board-name>/* $WORK/build/conf/
+cp $WORK/meta-renesas-ai-demos/meta-ai-demos-common/templates/<board-name>/* $WORK/build/conf/
 ```
 
 
