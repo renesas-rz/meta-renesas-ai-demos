@@ -1,0 +1,38 @@
+From 6ddebd5b75da0e370d8ea743af7f3dc7a03a096f Mon Sep 17 00:00:00 2001
+From: Hien Huynh <hien.huynh.px@renesas.com>
+Date: Wed, 22 May 2019 15:20:01 +0700
+Subject: [PATCH 3/5] dt-bindings: display: renesas: Add RZ/G2M HDMI TX DT
+ bindings
+
+The RZ/G2M HDMI TX controller is compatible with the R-Car Gen 3.
+No extension to the DT bindings are needed.
+
+Add an SoC-specific compatible string in case differences between
+the IP versions are found later and require model-specific handling.
+
+Signed-off-by: Hien Huynh <hien.huynh.px@renesas.com>
+---
+ Documentation/devicetree/bindings/display/bridge/renesas,dw-hdmi.txt | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/Documentation/devicetree/bindings/display/bridge/renesas,dw-hdmi.txt b/Documentation/devicetree/bindings/display/bridge/renesas,dw-hdmi.txt
+index a41d280..835ffcb 100644
+--- a/Documentation/devicetree/bindings/display/bridge/renesas,dw-hdmi.txt
++++ b/Documentation/devicetree/bindings/display/bridge/renesas,dw-hdmi.txt
+@@ -12,10 +12,12 @@ following device-specific properties.
+ Required properties:
+ 
+ - compatible : Shall contain one or more of
++  - "renesas,r8a774a1-hdmi" for R8A774A1 (RZ/G2M) compatible HDMI TX
+   - "renesas,r8a7795-hdmi" for R8A7795 (R-Car H3) compatible HDMI TX
+   - "renesas,r8a7796-hdmi" for R8A7796 (R-Car M3-W) compatible HDMI TX
+   - "renesas,r8a77965-hdmi" for R8A77965 (R-Car M3-N) compatible HDMI TX
+-  - "renesas,rcar-gen3-hdmi" for the generic R-Car Gen3 compatible HDMI TX
++  - "renesas,rcar-gen3-hdmi" for the generic R-Car Gen3
++				and RZ/G2 compatible HDMI TX
+ 
+     When compatible with generic versions, nodes must list the SoC-specific
+     version corresponding to the platform first, followed by the
+-- 
+2.7.4
+
