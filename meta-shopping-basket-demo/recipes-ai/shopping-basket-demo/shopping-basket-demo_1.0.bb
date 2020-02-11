@@ -4,10 +4,13 @@ DESCRIPTION = "Build and install the RZ/G2 Object Detection Shopping Basket Demo
 inherit populate_sdk_qt5
 require recipes-qt/qt5/qt5.inc
 
-LICENSE = "MIT"
-LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/${LICENSE};md5=0835ade698e0bcf8506ecda2f7b4f302"
+LICENSE = "GPL-2.0"
+LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/${LICENSE};md5=801f80980d171dd6425610833a22dbe6"
 
 DEPENDS = "qtmultimedia opencv gstreamer tensorflow-lite"
+RDEPENDS_${PN} = "libopencv-core libopencv-videoio libopencv-imgcodecs libopencv-imgproc"
+
+SHOPPING_DEMO_INSTALL_DIRECTORY ?= "/opt/shopping-basket-demo"
 
 SHOPPING_DEMO_REPO ?= "github.com/renesas-rz/rzg-shopping-basket-demo.git"
 SHOPPING_DEMO_REPO_PROTOCOL ?= "https"
@@ -20,14 +23,10 @@ SRC_URI = " \
 "
 SRCREV = "${AUTOREV}"
 
-SHOPPING_DEMO_INSTALL_DIRECTORY ?= "/opt/shopping-basket-demo"
-
 S = "${WORKDIR}/git"
 
 do_configure_prepend () {
 	export SDKTARGETSYSROOT="../recipe-sysroot"
-	export SHOPPING_DEMO_PLATFORM="${SHOPPING_DEMO_PLATFORM}"
-	export SHOPPING_DEMO_INSTALL_DIRECTORY="${SHOPPING_DEMO_INSTALL_DIRECTORY}"
 }
 
 do_install_append () {
