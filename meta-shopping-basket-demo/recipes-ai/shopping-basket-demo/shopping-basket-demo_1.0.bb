@@ -20,7 +20,10 @@ SRC_URI = " \
 	git://${SHOPPING_DEMO_REPO};protocol=${SHOPPING_DEMO_REPO_PROTOCOL};branch=${SHOPPING_DEMO_REPO_BRANCH} \
 	file://sample_images/ \
 	file://shoppingBasketDemo.tflite \
+	file://icons/ \
+	file://populate_scripts.sh \
 "
+
 SRCREV = "${AUTOREV}"
 
 S = "${WORKDIR}/git"
@@ -35,6 +38,14 @@ do_install_append () {
 	install -m 444 ${WORKDIR}/sample_images/* ${D}${SHOPPING_DEMO_INSTALL_DIRECTORY}/sample_images
 	install -m 444 ${WORKDIR}/shoppingBasketDemo.tflite ${D}${SHOPPING_DEMO_INSTALL_DIRECTORY}
 	install -m 555 ${B}/supermarket_demo_app ${D}${SHOPPING_DEMO_INSTALL_DIRECTORY}
+
+	if echo "${BBLAYERS}" | grep -wq "meta-ai-demos-common" ; then
+		install -d ${D}${SHOPPING_DEMO_INSTALL_DIRECTORY}/icons
+		install -d ${D}${SHOPPING_DEMO_INSTALL_DIRECTORY}/scripts
+		install -m 444 ${WORKDIR}/icons/* ${D}${SHOPPING_DEMO_INSTALL_DIRECTORY}/icons
+		${WORKDIR}/populate_scripts.sh ${SHOPPING_DEMO_INSTALL_DIRECTORY}
+		install -m 555 ${B}/scripts/* ${D}${SHOPPING_DEMO_INSTALL_DIRECTORY}/scripts
+	fi
 }
 
 FILES_${PN} = " \
