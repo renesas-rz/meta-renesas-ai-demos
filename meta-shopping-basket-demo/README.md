@@ -54,7 +54,7 @@ git checkout -b tmp c1b0c9f546289b1592d7a895640de103723a0305
 cd $WORK/meta-rzg2
 git checkout -b tmp BSP-1.0.1-update1
 cd $WORK/meta-renesas-ai
-git checkout -b tmp v3.1.1
+git checkout -b tmp v3.2.0
 cd $WORK/meta-renesas-ai-demos
 git checkout -b tmp SB_v1.0
 ```
