@@ -62,10 +62,10 @@ git checkout -b tmp SB_v1.0
 3. Download proprietary software packages from RZ/G Marketplace
 ```
 (Evaluation version)
-America: https://mp.renesas.com/en-us/rzg/marketplace/linux_package/rzg2-mlp-eva.html
-Europe: https://mp.renesas.com/en-eu/rzg/marketplace/linux_package/rzg2-mlp-eva.html
-Asia: https://mp.renesas.com/en-sg/rzg/marketplace/linux_package/rzg2-mlp-eva.html
-Japan: https://mp.renesas.com/ja-jp/rzg/marketplace/linux_package/rzg2-mlp-eva.html
+America: https://www.renesas.com/us/en/products/rzg-linux-platform/rzg-marcketplace/verified-linux-package/rzg2-mlp-eva.html
+Europe: https://www.renesas.com/eu/en/products/rzg-linux-platform/rzg-marcketplace/verified-linux-package/rzg2-mlp-eva.html
+Asia: https://www.renesas.com/sg/en/products/rzg-linux-platform/rzg-marcketplace/verified-linux-package/rzg2-mlp-eva.html
+Japan: https://www.renesas.com/jp/ja/products/rzg-linux-platform/rzg-marcketplace/verified-linux-package/rzg2-mlp-eva.html
 ```
 
 4. Extract and copy proprietary libraries
