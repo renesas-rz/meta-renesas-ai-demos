@@ -1,4 +1,4 @@
-# meta-object-detection-demo-env
+# meta-ai-demos-common
 This OpenEmbedded/Yocto layer adds a desktop background and icon launchers to
 the RZ/G2 reference platforms.
 
