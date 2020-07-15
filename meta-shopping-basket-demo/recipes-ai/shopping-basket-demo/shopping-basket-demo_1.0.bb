@@ -17,14 +17,14 @@ SHOPPING_DEMO_REPO_PROTOCOL ?= "https"
 SHOPPING_DEMO_REPO_BRANCH ?= "master"
 
 SRC_URI = " \
-	git://${SHOPPING_DEMO_REPO};protocol=${SHOPPING_DEMO_REPO_PROTOCOL};branch=${SHOPPING_DEMO_REPO_BRANCH} \
+	git://${SHOPPING_DEMO_REPO};protocol=${SHOPPING_DEMO_REPO_PROTOCOL};branch=${SHOPPING_DEMO_REPO_BRANCH};name=shopping-basket-demo \
 	file://sample_images/ \
 	file://shoppingBasketDemo.tflite \
 	file://icons/ \
 	file://populate_scripts.sh \
 "
 
-SRCREV = "${AUTOREV}"
+SRCREV_shopping-basket-demo ?= "6351aa022b3692e5756693a31b1b2ec370b0af54"
 
 S = "${WORKDIR}/git"
 
