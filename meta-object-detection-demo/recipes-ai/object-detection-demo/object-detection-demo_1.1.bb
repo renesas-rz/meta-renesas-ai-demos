@@ -17,17 +17,18 @@ OBJECT_DETECTION_DEMO_REPO_PROTOCOL ?= "https"
 OBJECT_DETECTION_DEMO_REPO_BRANCH ?= "master"
 
 SRC_URI = " \
-	git://${OBJECT_DETECTION_DEMO_REPO};protocol=${OBJECT_DETECTION_DEMO_REPO_PROTOCOL};branch=${OBJECT_DETECTION_DEMO_REPO_BRANCH};destsuffix=git/object_detection_demo;name=demo\
-	git://github.com/google-coral/edgetpu.git;protocol=git;tag=diploria2;destsuffix=git/edgetpu;name=edgetpu \
+	git://${OBJECT_DETECTION_DEMO_REPO};protocol=${OBJECT_DETECTION_DEMO_REPO_PROTOCOL};branch=${OBJECT_DETECTION_DEMO_REPO_BRANCH};destsuffix=git/object_detection_demo;name=object-detection-demo\
+	git://github.com/google-coral/edgetpu.git;protocol=git;destsuffix=git/edgetpu;name=edgetpu \
 	file://coco_labels.txt \
 	file://face_label.txt \
 	file://icons/ \
 	file://populate_scripts.sh \
 "
 
-SRCREV_FORMAT = "demo_edgetpu"
+SRCREV_FORMAT = "object-detection-demo_edgetpu"
 
-SRCREV_demo = "${AUTOREV}"
+SRCREV_object-detection-demo ?= "2e1e7d495fa8a8cc069db8cef7c725376b2c3eaf"
+SRCREV_edgetpu = "75e675633c2110a991426c8afa64f122b16ac372"
 
 S = "${WORKDIR}/git/object_detection_demo"
 

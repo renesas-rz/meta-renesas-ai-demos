@@ -93,7 +93,16 @@ cp $WORK/meta-renesas-ai-demos/meta-object-detection-demo/templates/ek874/* $WOR
 ```
 
 
-7. Start build
+7. (optional) Use the following commands in `$WORK/build/conf/local.conf` to edit the demo source:
+```
+OBJECT_DETECTION_DEMO_REPO = "github.com/renesas-rz/rzg-object-detection-demo.git"
+OBJECT_DETECTION_DEMO_REPO_PROTOCOL = "https"
+OBJECT_DETECTION_DEMO_REPO_BRANCH = "master"
+SRCREV_object-detection-demo = "2e1e7d495fa8a8cc069db8cef7c725376b2c3eaf" # Can be set to "${AUTOREV}" for the latest version.
+```
+
+
+8. Start build
 ```
 bitbake core-image-qt
 ```
