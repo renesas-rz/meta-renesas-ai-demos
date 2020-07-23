@@ -1,0 +1,116 @@
+From 686711d58c48d8e5c3348297c7b4708d313ca60c Mon Sep 17 00:00:00 2001
+From: Loc Lam <loc.lam.px@renesas.com>
+Date: Fri, 15 Nov 2019 17:38:35 +0700
+Subject: [PATCH 2/5] drm: rcar-du: Fix PHY configure registers
+
+By H/W manual update, the setting to PHY configure (0x17, 0x16, 0x06)
+through I2C is to recomended value.
+In addition, this patch sets PHY configure (0x09, 0x0e, 0x19)
+registers added by H/W manual update.
+
+This commit refers from commit <4d606ecb9e682d10634bf58d508438aba8fa7ef7> on
+https://git.kernel.org/pub/scm/linux/kernel/git/horms/renesas-bsp
+
+Signed-off-by: Koji Matsuoka <koji.matsuoka.xm@renesas.com>
+Signed-off-by: Kha Tran <kha.tran.px@renesas.com>
+Signed-off-by: Loc Lam <loc.lam.px@renesas.com>
+---
+ drivers/gpu/drm/rcar-du/rcar_dw_hdmi.c | 52 ++++++++++++++++++++++++++++------
+ 1 file changed, 44 insertions(+), 8 deletions(-)
+
+diff --git a/drivers/gpu/drm/rcar-du/rcar_dw_hdmi.c b/drivers/gpu/drm/rcar-du/rcar_dw_hdmi.c
+index 8e6abe8..2e8b8ed 100644
+--- a/drivers/gpu/drm/rcar-du/rcar_dw_hdmi.c
++++ b/drivers/gpu/drm/rcar-du/rcar_dw_hdmi.c
+@@ -17,9 +17,18 @@
+ #include <drm/bridge/dw_hdmi.h>
+ 
+ #define RCAR_HDMI_PHY_OPMODE_PLLCFG	0x06	/* Mode of operation and PLL dividers */
++
++/* Clock Symbol and Transmitter Control Register */
++#define RCAR_HDMI_PHY_CKSYMTXCTRL	0x09
++
++/* Voltage Level Control Register */
++#define RCAR_HDMI_PHY_VLEVCTRL		0x0e
+ #define RCAR_HDMI_PHY_PLLCURRGMPCTRL	0x10	/* PLL current and Gmp (conductance) */
+ #define RCAR_HDMI_PHY_PLLDIVCTRL	0x11	/* PLL dividers */
+ 
++/* Transmission Termination Register */
++#define RCAR_HDMI_PHY_TXTERM		0x19
++
+ struct rcar_hdmi_phy_params {
+ 	unsigned long mpixelclock;
+ 	u16 opmode_div;	/* Mode of operation and PLL dividers */
+@@ -27,15 +36,22 @@ struct rcar_hdmi_phy_params {
+ 	u16 div;	/* PLL dividers */
+ };
+ 
++struct rcar_hdmi_phy_params_2 {
++	unsigned long mpixelclock;
++	u16 clk;        /* Clock Symbol and Transmitter Control Register */
++	u16 vol_level;  /* Voltage Level */
++	u16 trans;      /* Transmission Termination Register */
++};
++
+ static const struct rcar_hdmi_phy_params rcar_hdmi_phy_params[] = {
+-	{ 35500000,  0x0003, 0x0344, 0x0328 },
+-	{ 44900000,  0x0003, 0x0285, 0x0128 },
+-	{ 71000000,  0x0002, 0x1184, 0x0314 },
+-	{ 90000000,  0x0002, 0x1144, 0x0114 },
+-	{ 140250000, 0x0001, 0x20c4, 0x030a },
+-	{ 182750000, 0x0001, 0x2084, 0x010a },
+-	{ 281250000, 0x0000, 0x0084, 0x0305 },
+-	{ 297000000, 0x0000, 0x0084, 0x0105 },
++	{ 35500000,  0x0003, 0x0283, 0x0628 },
++	{ 44900000,  0x0003, 0x0285, 0x0228 },
++	{ 71000000,  0x0002, 0x1183, 0x0614 },
++	{ 90000000,  0x0002, 0x1142, 0x0214 },
++	{ 140250000, 0x0001, 0x20c0, 0x060a },
++	{ 182750000, 0x0001, 0x2080, 0x020a },
++	{ 281250000, 0x0000, 0x3040, 0x0605 },
++	{ 297000000, 0x0000, 0x3041, 0x0205 },
+ 	{ ~0UL,      0x0000, 0x0000, 0x0000 },
+ };
+ 
+@@ -53,11 +69,18 @@ rcar_hdmi_mode_valid(struct drm_connector *connector,
+ 	return MODE_OK;
+ }
+ 
++static const struct rcar_hdmi_phy_params_2 rcar_hdmi_phy_params_2[] = {
++	{ 165000000,  0x8c88, 0x0180, 0x0007},
++	{ 297000000,  0x83c8, 0x0180, 0x0004},
++	{ ~0UL,       0x0000, 0x0000, 0x0000},
++};
++
+ static int rcar_hdmi_phy_configure(struct dw_hdmi *hdmi,
+ 				   const struct dw_hdmi_plat_data *pdata,
+ 				   unsigned long mpixelclock)
+ {
+ 	const struct rcar_hdmi_phy_params *params = rcar_hdmi_phy_params;
++	const struct rcar_hdmi_phy_params_2 *params_2 = rcar_hdmi_phy_params_2;
+ 
+ 	for (; params->mpixelclock != ~0UL; ++params) {
+ 		if (mpixelclock <= params->mpixelclock)
+@@ -73,6 +96,19 @@ static int rcar_hdmi_phy_configure(struct dw_hdmi *hdmi,
+ 			      RCAR_HDMI_PHY_PLLCURRGMPCTRL);
+ 	dw_hdmi_phy_i2c_write(hdmi, params->div, RCAR_HDMI_PHY_PLLDIVCTRL);
+ 
++	for (; params_2->mpixelclock != ~0UL; ++params_2) {
++		if (mpixelclock <= params_2->mpixelclock)
++			break;
++	}
++
++	if (params_2->mpixelclock == ~0UL)
++		return -EINVAL;
++
++	dw_hdmi_phy_i2c_write(hdmi, params_2->clk, RCAR_HDMI_PHY_CKSYMTXCTRL);
++	dw_hdmi_phy_i2c_write(hdmi, params_2->vol_level,
++				RCAR_HDMI_PHY_VLEVCTRL);
++	dw_hdmi_phy_i2c_write(hdmi, params_2->trans, RCAR_HDMI_PHY_TXTERM);
++
+ 	return 0;
+ }
+ 
+-- 
+2.7.4
+

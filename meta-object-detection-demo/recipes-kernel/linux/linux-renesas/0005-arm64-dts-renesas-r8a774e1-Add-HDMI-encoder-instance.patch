@@ -1,0 +1,62 @@
+From fc38be8c685171f7c0bed84d4dd2b72893e7651d Mon Sep 17 00:00:00 2001
+From: "Loc Phuoc Pham.Lam" <loc.lam.px@renesas.com>
+Date: Tue, 14 Apr 2020 14:00:41 +0700
+Subject: [PATCH 5/5] arm64: dts: renesas: r8a774e1: Add HDMI encoder instance
+
+Add the HDMI encoder to the R8A774E1 DT in disabled state
+
+Signed-off-by: Loc Phuoc Pham.Lam <loc.lam.px@renesas.com>
+---
+ arch/arm64/boot/dts/renesas/r8a774e1.dtsi | 14 +++++++++++++-
+ 1 file changed, 13 insertions(+), 1 deletion(-)
+
+diff --git a/arch/arm64/boot/dts/renesas/r8a774e1.dtsi b/arch/arm64/boot/dts/renesas/r8a774e1.dtsi
+index b3451f5..9e2ae91 100644
+--- a/arch/arm64/boot/dts/renesas/r8a774e1.dtsi
++++ b/arch/arm64/boot/dts/renesas/r8a774e1.dtsi
+@@ -2372,7 +2372,16 @@
+ 		};
+ 
+ 		hdmi0: hdmi@fead0000 {
++			compatible = "renesas,r8a774e1-hdmi",
++				     "renesas,rcar-gen3-hdmi";
+ 			reg = <0 0xfead0000 0 0x10000>;
++			interrupts = <GIC_SPI 389 IRQ_TYPE_LEVEL_HIGH>;
++			clocks = <&cpg CPG_MOD 729>,
++				 <&cpg CPG_CORE R8A774E1_CLK_HDMI>;
++			clock-names = "iahb", "isfr";
++			power-domains = <&sysc R8A774E1_PD_ALWAYS_ON>;
++			resets = <&cpg 729>;
++			status = "disabled";
+ 
+ 			ports {
+ 				#address-cells = <1>;
+@@ -2380,6 +2389,8 @@
+ 				port@0 {
+ 					reg = <0>;
+ 					dw_hdmi0_in: endpoint {
++						remote-endpoint =
++							<&du_out_hdmi0>;
+ 					};
+ 				};
+ 				port@1 {
+@@ -2390,7 +2401,6 @@
+ 					reg = <2>;
+ 				};
+ 			};
+-			/* placeholder */
+ 		};
+ 
+ 		du: display@feb00000 {
+@@ -2419,6 +2429,8 @@
+ 				port@1 {
+ 					reg = <1>;
+ 					du_out_hdmi0: endpoint {
++						remote-endpoint =
++							<&dw_hdmi0_in>;
+ 					};
+ 				};
+ 				port@2 {
+-- 
+2.7.4
+

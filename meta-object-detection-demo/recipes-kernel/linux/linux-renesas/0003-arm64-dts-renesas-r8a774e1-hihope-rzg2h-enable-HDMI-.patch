@@ -1,0 +1,39 @@
+From 947ce750d51738b0d5beda65751976b08942743d Mon Sep 17 00:00:00 2001
+From: Hien Huynh <hien.huynh.px@renesas.com>
+Date: Tue, 12 May 2020 10:08:54 +0700
+Subject: [PATCH 3/5] arm64: dts: renesas: r8a774e1-hihope-rzg2h: enable HDMI
+ audio output
+
+This patch enable HDMI output to support HDMI codec in HiHope G2H
+Platform.
+
+Signed-off-by: Hao Bui <hao.bui.yg@renesas.com>
+Signed-off-by: Hien Huynh <hien.huynh.px@renesas.com>
+---
+ arch/arm64/boot/dts/renesas/r8a774e1-hihope-rzg2h.dts | 10 ----------
+ 1 file changed, 10 deletions(-)
+
+diff --git a/arch/arm64/boot/dts/renesas/r8a774e1-hihope-rzg2h.dts b/arch/arm64/boot/dts/renesas/r8a774e1-hihope-rzg2h.dts
+index 201e046..27b78f5 100644
+--- a/arch/arm64/boot/dts/renesas/r8a774e1-hihope-rzg2h.dts
++++ b/arch/arm64/boot/dts/renesas/r8a774e1-hihope-rzg2h.dts
+@@ -61,16 +61,6 @@
+ 	};
+ };
+ 
+-&sound_card {
+-	dais = <&rsnd_port1>;	/* PCM5102A */
+-};
+-
+-&rcar_sound {
+-	ports {
+-		/delete-node/ rsnd_port0;
+-	};
+-};
+-
+ &xhci0 {
+ 	memory-region = <&global_cma>;
+ };
+-- 
+2.7.4
+

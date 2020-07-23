@@ -39,7 +39,6 @@ git clone https://github.com/renesas-rz/meta-renesas-ai.git
 git clone https://github.com/renesas-rz/meta-renesas-ai-demos.git
 ```
 
-
 2. Checkout specific versions
 ```
 cd $WORK/poky
@@ -51,11 +50,11 @@ git checkout -b tmp 75dfb67bbb14a70cd47afda9726e2e1c76731885
 cd $WORK/meta-qt5
 git checkout -b tmp c1b0c9f546289b1592d7a895640de103723a0305
 cd $WORK/meta-rzg2
-git checkout -b tmp BSP-1.0.1-update1
+git checkout -b tmp BSP-1.0.4-update1
 cd $WORK/meta-renesas-ai
-git checkout -b tmp v3.2.0
+git checkout -b tmp v3.5.0
 cd $WORK/meta-renesas-ai-demos
-git checkout -b tmp OD_v1.1
+git checkout -b tmp OD_v2.0
 ```
 
 3. Download proprietary software packages from RZ/G Marketplace
@@ -76,13 +75,11 @@ sh docs/sample/copyscript/copy_proprietary_softwares.sh -f $PKGS_DIR
 unset PKGS_DIR
 ```
 
-
 5. Execute source command
 ```
 cd $WORK
 source poky/oe-init-build-env
 ```
-
 
 6. Copy build configuration files
 ```
@@ -92,7 +89,6 @@ cp $WORK/meta-renesas-ai-demos/meta-object-detection-demo/templates/hihope-rzg2m
 cp $WORK/meta-renesas-ai-demos/meta-object-detection-demo/templates/ek874/* $WORK/build/conf/
 ```
 
-
 7. (optional) Use the following commands in `$WORK/build/conf/local.conf` to edit the demo source:
 ```
 OBJECT_DETECTION_DEMO_REPO = "github.com/renesas-rz/rzg-object-detection-demo.git"
@@ -101,12 +97,10 @@ OBJECT_DETECTION_DEMO_REPO_BRANCH = "master"
 SRCREV_object-detection-demo = "2e1e7d495fa8a8cc069db8cef7c725376b2c3eaf" # Can be set to "${AUTOREV}" for the latest version.
 ```
 
-
 8. Start build
 ```
 bitbake core-image-qt
 ```
-
 
 Once the build is completed, the Kernel, device tree and RFS are located in:
 ```
