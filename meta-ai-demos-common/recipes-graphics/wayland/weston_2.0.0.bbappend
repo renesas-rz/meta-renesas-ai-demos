@@ -10,7 +10,7 @@ SRC_URI_append += " \
 "
 
 do_install_append_ek874() {
-	${WORKDIR}/populate_weston-720p.sh ${D}/${sysconfdir}/xdg/weston/weston.ini ${DEMOS_DESKTOP_COMMON_INSTALL_DIRECTORY}
+	${WORKDIR}/populate_weston-720p.sh ${D}/${sysconfdir}/xdg/weston/weston.ini
 }
 
 do_install_append() {
