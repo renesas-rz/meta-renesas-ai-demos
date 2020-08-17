@@ -8,7 +8,7 @@ LICENSE = "GPL-2.0"
 LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/${LICENSE};md5=801f80980d171dd6425610833a22dbe6"
 
 DEPENDS = "qtmultimedia opencv gstreamer tensorflow-lite google-coral"
-RDEPENDS_${PN} = "libopencv-core libopencv-videoio libopencv-imgcodecs libopencv-imgproc google-coral"
+RDEPENDS_${PN} = "libopencv-core libopencv-videoio libopencv-imgcodecs libopencv-imgproc libopencv-imgcodecs google-coral"
 
 OBJECT_DETECTION_DEMO_INSTALL_DIRECTORY ?= "/opt/object-detection-demo"
 
