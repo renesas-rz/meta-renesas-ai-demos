@@ -50,6 +50,7 @@ do_install_append () {
 	install -m 444 ${WORKDIR}/git/edgetpu/test_data/owl.jpg ${D}${OBJECT_DETECTION_DEMO_INSTALL_DIRECTORY}
 	install -m 444 ${WORKDIR}/git/edgetpu/test_data/parrot.jpg ${D}${OBJECT_DETECTION_DEMO_INSTALL_DIRECTORY}
 	install -m 444 ${WORKDIR}/git/edgetpu/test_data/pets.jpg ${D}${OBJECT_DETECTION_DEMO_INSTALL_DIRECTORY}
+	install -m 444 ${WORKDIR}/git/edgetpu/test_data/COPYRIGHT ${D}${OBJECT_DETECTION_DEMO_INSTALL_DIRECTORY}
 	install -m 444 ${WORKDIR}/coco_labels.txt ${D}${OBJECT_DETECTION_DEMO_INSTALL_DIRECTORY}
 	install -m 444 ${WORKDIR}/face_label.txt ${D}${OBJECT_DETECTION_DEMO_INSTALL_DIRECTORY}
 	install -m 555 ${B}/object_detection_demo ${D}${OBJECT_DETECTION_DEMO_INSTALL_DIRECTORY}
