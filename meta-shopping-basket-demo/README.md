@@ -56,7 +56,7 @@ git checkout -b tmp BSP-1.0.1-update1
 cd $WORK/meta-renesas-ai
 git checkout -b tmp v3.2.0
 cd $WORK/meta-renesas-ai-demos
-git checkout -b tmp SB_v1.0
+git checkout -b tmp SB_v1.1
 ```
 
 3. Download proprietary software packages from RZ/G Marketplace
