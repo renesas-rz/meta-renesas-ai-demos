@@ -1,0 +1,6 @@
+include:
+  - project: spl2/continuous-integration/ci-pipelines
+    ref: master
+    file:
+      - /meta-renesas-ai-demos/main.yml
+      - /meta-renesas-ai-demos/jobs.yml
