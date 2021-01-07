@@ -5,11 +5,11 @@ Source Software) Object Detection Demo to the RZ/G2 series of Linux platforms.
 
 This meta-layer builds the Object Detection Demo application using qmake. All
 dependencies for the demo are also built and installed in the final filesystem.
-The source code for the demo application can be found here:
+The source code for the demo application can be found here:  
 **https://github.com/renesas-rz/rzg-object-detection-demo.git**
 
 
-The demo is based on the Renesas RZ/G AI BSP which is published on GitHub:
+The demo is based on the Renesas RZ/G AI BSP which is published on GitHub:  
 **https://github.com/renesas-rz/meta-renesas-ai**
 
 
@@ -24,6 +24,18 @@ Supported Platforms:
 - Installed packages: gawk wget git-core diffstat unzip texinfo gcc-multilib
 build-essential chrpath socat libsdl1.2-dev xterm cpio python python3
 python3-pip python3-pexpect xz-utils debianutils iputils-ping
+
+Before using this process, set the product ID and platform:
+
+RZ/G2M:
+```
+export PLATFORM=hihope-rzg2m
+```
+
+RZ/G2E:
+```
+export PLATFORM=ek874
+```
 
 1. Clone required repositories
 ```
@@ -86,10 +98,7 @@ source poky/oe-init-build-env
 
 6. Copy build configuration files
 ```
-# For hihope-rzg2m:
-cp $WORK/meta-renesas-ai-demos/meta-object-detection-demo/templates/hihope-rzg2m/* $WORK/build/conf/
-# For ek874:
-cp $WORK/meta-renesas-ai-demos/meta-object-detection-demo/templates/ek874/* $WORK/build/conf/
+cp $WORK/meta-renesas-ai-demos/meta-object-detection-demo/templates/$PLATFORM/* $WORK/build/conf/
 ```
 
 7. (optional) Use the following commands in `$WORK/build/conf/local.conf` to edit the demo source version:
@@ -107,12 +116,103 @@ bitbake core-image-qt
 
 Once the build is completed, the Kernel, device tree and RFS are located in:
 ```
-# For hihope-rzg2m:
-$WORK/build/tmp/deploy/images/hihope-rzg2m
-# For ek874:
-$WORK/build/tmp/deploy/images/ek874
+$WORK/build/tmp/deploy/images/$PLATFORM
 ```
 
+## Flashing instructions
+### Partition and Format the SD
+The SD card should be formatted to EXT4. Parted provides a terminal utility
+to do this, alternatively Gnome Disks can be used from the Ubuntu GUI.
+
+1. Install the tool
+```
+sudo apt update
+sudo apt install parted
+```
+
+2. Identify the block device name for the SD Card, for example "/dev/sdc"
+```
+sudo fdisk -l
+```
+
+3. Create the partition table with an EXT4 partition
+```
+sudo parted /dev/sdc --script -- mklabel gpt
+sudo parted /dev/sdc --script -- mkpart primary ext4 0% 100%
+```
+
+4. Format the partition to EXT4
+```
+sudo mkfs.ext4 -F /dev/sdc1
+```
+
+5. Confirm the partition table is set as expected
+```
+sudo parted /dev/sdc --script print
+```
+
+### Extract the Filesystem
+Mount the root file system and extract it to the SD card
+```
+mount -t ext4 /dev/sdc1 /mnt/SD
+sudo tar -xf core-image-qt-$PLATFORM.tar.gz -C /mnt/SD
+```
+
+### Add the Kernel Image and DTB
+Copy the Kernel Image and DTB to the boot directory in the root filesystem
+```
+cp Image-$PLATFORM.bin Image-*.dtb /mnt/SD/boot/
+```
+
+### Using Wic Images
+An alternative to the steps above is to use the Wic images yocto builds. A Wic
+image provides a way to flash a bootable image with all the needed files.
+
+From the host machine, flash the yocto generated Wic image with:
+```
+sudo bmaptool copy core-image-qt-$PLATFORM.wic.gz /dev/sdc --nobmap
+```
+
+## Configuring the Platform
+### Boot the Board
+Make the following connections to the host machine:
+* Ethernet
+* Serial
+
+Make the following peripheral connections:
+* Camera
+* Mouse or USB touch
+* HDMI
+* Power
+
+Then apply power to the board and enter U-Boot.
+
+### Set U-Boot configuration environment
+The U-Boot environment can be set from the U-boot terminal.
+
+For the RZ/G2M:
+```
+setenv bootargs 'console=ttyS0,115200 rw root=/dev/mmcblk0p1 rootwait ip=192.168.1.2:::::eth0'
+setenv bootcmd 'ext4load mmc 0 0x48080000 Image-hihope-rzg2m.bin; ext4load mmc 0 0x48000000 Image-r8a774a1-hihope-rzg2m-ex.dtb; booti 0x48080000 - 0x48000000'
+```
+For the RZ/G2E:
+```
+setenv bootargs 'console=ttyS0,115200 rw root=/dev/mmcblk0p1 rootwait ip=192.168.1.2:::::eth0'
+setenv bootcmd 'ext4load mmc 0 0x48080000 Image-ek874.bin; ext4load mmc 0 0x48000000 Image-r8a774c0-ek874.dtb; booti 0x48080000 - 0x48000000'
+```
+
+Finally, save the environment and boot:
+```
+saveenv
+boot
+```
+
+Once Linux has booted, launch the demo from the terminal
+```
+/opt/object-detection-demo/object_detection_demo
+```
+
+Alternatively, use the GUI buttons on the top left to start the demo.
 
 ## How to use the demo
 ```
