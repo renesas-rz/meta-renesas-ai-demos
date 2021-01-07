@@ -14,6 +14,7 @@ The demo is based on the Renesas RZ/G AI BSP which is published on GitHub:
 
 
 Supported Platforms:
+- Renesas RZ/G2H hihope-rzg2h from Hoperun
 - Renesas RZ/G2M hihope-rzg2m from Hoperun
 - Renesas RZ/G2E ek874 from Silicon Linux
 
@@ -26,6 +27,11 @@ build-essential chrpath socat libsdl1.2-dev xterm cpio python python3
 python3-pip python3-pexpect xz-utils debianutils iputils-ping
 
 Before using this process, set the product ID and platform:
+
+RZ/G2H:
+```
+export PLATFORM=hihope-rzg2h
+```
 
 RZ/G2M:
 ```
@@ -190,6 +196,11 @@ Then apply power to the board and enter U-Boot.
 ### Set U-Boot configuration environment
 The U-Boot environment can be set from the U-boot terminal.
 
+For the RZ/G2H:
+```
+setenv bootargs 'console=ttyS0,115200 rw root=/dev/mmcblk0p1 rootwait ip=192.168.1.2:::::eth0'
+setenv bootcmd 'ext4load mmc 0 0x48080000 Image-hihope-rzg2h.bin; ext4load mmc 0 0x48000000 Image-r8a774e1-hihope-rzg2h-ex.dtb; booti 0x48080000 - 0x48000000'
+```
 For the RZ/G2M:
 ```
 setenv bootargs 'console=ttyS0,115200 rw root=/dev/mmcblk0p1 rootwait ip=192.168.1.2:::::eth0'
