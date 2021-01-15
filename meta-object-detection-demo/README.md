@@ -33,6 +33,7 @@ cd $WORK
 git clone git://git.yoctoproject.org/poky.git
 git clone git://git.openembedded.org/meta-openembedded.git
 git clone git://git.linaro.org/openembedded/meta-linaro.git
+git clone git://git.yoctoproject.org/meta-gplv2.git
 git clone https://github.com/meta-qt5/meta-qt5.git
 git clone https://github.com/renesas-rz/meta-rzg2.git
 git clone https://github.com/renesas-rz/meta-renesas-ai.git
@@ -47,6 +48,8 @@ cd $WORK/meta-openembedded
 git checkout -b tmp 352531015014d1957d6444d114f4451e241c4d23
 cd $WORK/meta-linaro
 git checkout -b tmp 75dfb67bbb14a70cd47afda9726e2e1c76731885
+cd $WORK/meta-gplv2
+git checkout -b tmp f875c60ecd6f30793b80a431a2423c4b98e51548
 cd $WORK/meta-qt5
 git checkout -b tmp c1b0c9f546289b1592d7a895640de103723a0305
 cd $WORK/meta-rzg2
@@ -89,7 +92,7 @@ cp $WORK/meta-renesas-ai-demos/meta-object-detection-demo/templates/hihope-rzg2m
 cp $WORK/meta-renesas-ai-demos/meta-object-detection-demo/templates/ek874/* $WORK/build/conf/
 ```
 
-7. (optional) Use the following commands in `$WORK/build/conf/local.conf` to edit the demo source:
+7. (optional) Use the following commands in `$WORK/build/conf/local.conf` to edit the demo source version:
 ```
 OBJECT_DETECTION_DEMO_REPO = "github.com/renesas-rz/rzg-object-detection-demo.git"
 OBJECT_DETECTION_DEMO_REPO_PROTOCOL = "https"
