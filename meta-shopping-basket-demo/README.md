@@ -22,24 +22,23 @@ Supported Platforms:
 **Build machine dependencies**
 - Ubuntu 16.04 LTS
 - Installed packages: gawk wget git-core diffstat unzip texinfo gcc-multilib
-build-essential chrpath socat cpio python python3 python3-pip python3-pexpect
-xz-utils debianutils iputils-ping libsdl1.2-dev xterm
-
+build-essential chrpath socat libsdl1.2-dev xterm cpio python python3
+python3-pip python3-pexpect xz-utils debianutils iputils-ping
 
 1. Clone required repositories
 ```
 export WORK=<path-to-your-build-directory>
-mkdir $WORK
+mkdir -p $WORK
 cd $WORK
 git clone git://git.yoctoproject.org/poky.git
 git clone git://git.openembedded.org/meta-openembedded.git
 git clone git://git.linaro.org/openembedded/meta-linaro.git
+git clone git://git.yoctoproject.org/meta-gplv2.git
 git clone https://github.com/meta-qt5/meta-qt5.git
 git clone https://github.com/renesas-rz/meta-rzg2.git
 git clone https://github.com/renesas-rz/meta-renesas-ai.git
 git clone https://github.com/renesas-rz/meta-renesas-ai-demos.git
 ```
-
 
 2. Checkout specific versions
 ```
@@ -49,6 +48,8 @@ cd $WORK/meta-openembedded
 git checkout -b tmp 352531015014d1957d6444d114f4451e241c4d23
 cd $WORK/meta-linaro
 git checkout -b tmp 75dfb67bbb14a70cd47afda9726e2e1c76731885
+cd $WORK/meta-gplv2
+git checkout -b tmp f875c60ecd6f30793b80a431a2423c4b98e51548
 cd $WORK/meta-qt5
 git checkout -b tmp c1b0c9f546289b1592d7a895640de103723a0305
 cd $WORK/meta-rzg2
@@ -77,21 +78,18 @@ sh docs/sample/copyscript/copy_proprietary_softwares.sh -f $PKGS_DIR
 unset PKGS_DIR
 ```
 
-
 5. Execute source command
 ```
 cd $WORK
 source poky/oe-init-build-env
 ```
 
-
 6. Copy build configuration files
 ```
 cp $WORK/meta-renesas-ai-demos/meta-shopping-basket-demo/templates/hihope-rzg2m/* $WORK/build/conf/
 ```
 
-
-7. (optional) Use the following commands in `$WORK/build/conf/local.conf` to edit the demo source:
+7. (optional) Use the following commands in `$WORK/build/conf/local.conf` to edit the demo source version:
 ```
 SHOPPING_DEMO_REPO = "github.com/renesas-rz/rzg-shopping-basket-demo.git"
 SHOPPING_DEMO_REPO_PROTOCOL = "https"
@@ -99,12 +97,10 @@ SHOPPING_DEMO_REPO_BRANCH = "master"
 SRCREV_shopping-basket-demo = "6351aa022b3692e5756693a31b1b2ec370b0af54" # Can be set to "${AUTOREV}" for the latest version.
 ```
 
-
 8. Start build
 ```
 bitbake core-image-qt
 ```
-
 
 Once the build is completed, the Kernel, device tree and RFS are located in:
 ```
