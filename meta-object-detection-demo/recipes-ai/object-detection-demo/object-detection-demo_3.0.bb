@@ -28,7 +28,7 @@ SRC_URI = " \
 
 SRCREV_FORMAT = "object-detection-demo_edgetpu"
 
-SRCREV_object-detection-demo ?= "9ad74d44bc5d6ea1890e0106460550b9bcd66cec"
+SRCREV_object-detection-demo ?= "7bb97be625c4bd5f3bbf2bfbc4e681d715c31b25"
 SRCREV_edgetpu = "75e675633c2110a991426c8afa64f122b16ac372"
 
 S = "${WORKDIR}/git/object_detection_demo"

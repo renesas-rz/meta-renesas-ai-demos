@@ -75,7 +75,7 @@ git checkout -b tmp BSP-1.0.4-update1
 cd $WORK/meta-renesas-ai
 git checkout -b tmp v3.5.1
 cd $WORK/meta-renesas-ai-demos
-git checkout -b tmp OD_v2.0
+git checkout -b tmp OD_v3.0
 ```
 
 3. Download proprietary software packages from RZ/G Marketplace
@@ -112,7 +112,7 @@ cp $WORK/meta-renesas-ai-demos/meta-object-detection-demo/templates/$PLATFORM/* 
 OBJECT_DETECTION_DEMO_REPO = "github.com/renesas-rz/rzg-object-detection-demo.git"
 OBJECT_DETECTION_DEMO_REPO_PROTOCOL = "https"
 OBJECT_DETECTION_DEMO_REPO_BRANCH = "master"
-SRCREV_object-detection-demo = "2e1e7d495fa8a8cc069db8cef7c725376b2c3eaf" # Can be set to "${AUTOREV}" for the latest version.
+SRCREV_object-detection-demo = "7bb97be625c4bd5f3bbf2bfbc4e681d715c31b25" # Can be set to "${AUTOREV}" for the latest version.
 ```
 
 8. Start build
