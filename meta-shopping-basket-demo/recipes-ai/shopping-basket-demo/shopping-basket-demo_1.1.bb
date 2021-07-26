@@ -7,7 +7,7 @@ require recipes-qt/qt5/qt5.inc
 LICENSE = "GPL-2.0"
 LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/${LICENSE};md5=801f80980d171dd6425610833a22dbe6"
 
-DEPENDS = "qtmultimedia opencv gstreamer tensorflow-lite"
+DEPENDS = "qtmultimedia opencv gstreamer1.0 tensorflow-lite"
 RDEPENDS_${PN} = "libopencv-core libopencv-videoio libopencv-imgcodecs libopencv-imgproc"
 
 SHOPPING_DEMO_INSTALL_DIRECTORY ?= "/opt/shopping-basket-demo"
