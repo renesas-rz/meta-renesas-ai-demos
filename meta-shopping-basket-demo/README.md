@@ -53,11 +53,9 @@ git checkout -b tmp f875c60ecd6f30793b80a431a2423c4b98e51548
 cd $WORK/meta-qt5
 git checkout -b tmp c1b0c9f546289b1592d7a895640de103723a0305
 cd $WORK/meta-rzg2
-git checkout -b tmp BSP-1.0.1-update1
+git checkout -b tmp BSP-1.0.8
 cd $WORK/meta-renesas-ai
-git checkout -b tmp v3.2.0
-cd $WORK/meta-renesas-ai-demos
-git checkout -b tmp SB_v1.1
+git checkout -b tmp 459771e4ba3699fc87a1bcb19252d2c341f50701
 ```
 
 3. Download proprietary software packages from RZ/G Marketplace
