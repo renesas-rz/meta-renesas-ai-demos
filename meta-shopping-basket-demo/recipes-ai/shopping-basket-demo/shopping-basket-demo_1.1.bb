@@ -8,7 +8,7 @@ LICENSE = "GPL-2.0"
 LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/${LICENSE};md5=801f80980d171dd6425610833a22dbe6"
 
 DEPENDS = "qtmultimedia opencv gstreamer1.0 tensorflow-lite"
-RDEPENDS_${PN} = "libopencv-core libopencv-videoio libopencv-imgcodecs libopencv-imgproc"
+RDEPENDS_${PN} = "libopencv-core libopencv-videoio libopencv-imgcodecs libopencv-imgproc armnn-dev"
 
 SHOPPING_DEMO_INSTALL_DIRECTORY ?= "/opt/shopping-basket-demo"
 
@@ -51,3 +51,5 @@ do_install_append () {
 FILES_${PN} = " \
 	${SHOPPING_DEMO_INSTALL_DIRECTORY} \
 "
+
+INSANE_SKIP_${PN} = "dev-deps dev-so"
