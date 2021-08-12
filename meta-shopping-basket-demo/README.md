@@ -16,6 +16,7 @@ The demo is based on the Renesas RZ/G AI BSP which is published on GitHub:
 
 Supported Platforms:
 - Renesas RZ/G2M hihope-rzg2m
+- Renesas RZ/G2L smarc-rzg2l
 
 
 ## Build Instructions
@@ -41,6 +42,7 @@ git clone https://github.com/renesas-rz/meta-renesas-ai-demos.git
 ```
 
 2. Checkout specific versions
+RZ/G2M:
 ```
 cd $WORK/poky
 git checkout -b tmp 7e7ee662f5dea4d090293045f7498093322802cc
@@ -58,7 +60,24 @@ cd $WORK/meta-renesas-ai
 git checkout -b tmp 459771e4ba3699fc87a1bcb19252d2c341f50701
 ```
 
+RZ/G2L:
+```
+cd $WORK/poky
+git checkout -b tmp dunfell-23.0.5
+cd $WORK/meta-openembedded
+git checkout -b tmp cc6fc6b1641ab23089c1e3bba11e0c6394f0867c
+cd $WORK/meta-gplv2
+git checkout -b tmp 60b251c25ba87e946a0ca4cdc8d17b1cb09292ac
+cd $WORK/meta-qt5
+git checkout -b tmp c1b0c9f546289b1592d7a895640de103723a0305
+cd $WORK/meta-rzg2
+git checkout -b tmp b56a64c9badcb8cd43d286bbe0f57ac97fb465fc
+cd $WORK/meta-renesas-ai
+git checkout -b tmp 459771e4ba3699fc87a1bcb19252d2c341f50701
+```
+
 3. Download proprietary software packages from RZ/G Marketplace
+RZ/G2M:
 ```
 (Evaluation version)
 America: https://www.renesas.com/us/en/products/rzg-linux-platform/rzg-marcketplace/verified-linux-package/rzg2-mlp-eva.html
@@ -67,7 +86,17 @@ Asia: https://www.renesas.com/sg/en/products/rzg-linux-platform/rzg-marcketplace
 Japan: https://www.renesas.com/jp/ja/products/rzg-linux-platform/rzg-marcketplace/verified-linux-package/rzg2-mlp-eva.html
 ```
 
+RZ/G2L:
+```
+America: https://www.renesas.com/us/en/products/microcontrollers-microprocessors/rz-arm-based-high-end-32-64-bit-mpus/rzg2l-general-purpose-microprocessors-dual-core-arm-cortex-a55-12-ghz-cpus-3d-graphics-and-video-codec
+Europe: https://www.renesas.com/eu/en/products/microcontrollers-microprocessors/rz-arm-based-high-end-32-64-bit-mpus/rzg2l-general-purpose-microprocessors-dual-core-arm-cortex-a55-12-ghz-cpus-3d-graphics-and-video-codec
+Asia: https://www.renesas.com/sg/en/products/microcontrollers-microprocessors/rz-arm-based-high-end-32-64-bit-mpus/rzg2l-general-purpose-microprocessors-dual-core-arm-cortex-a55-12-ghz-cpus-3d-graphics-and-video-codec
+Japan: https://www.renesas.com/jp/ja/products/microcontrollers-microprocessors/rz-arm-based-high-end-32-64-bit-mpus/rzg2l-general-purpose-microprocessors-dual-core-arm-cortex-a55-12-ghz-cpus-3d-graphics-and-video-codec
+```
+
+
 4. Extract and copy proprietary libraries
+RZ/G2M:
 ```
 tar -C $WORK -zxf $WORK/RZG2_Group_*_Software_Package_for_Linux_*.tar.gz
 export PKGS_DIR=$WORK/proprietary
@@ -76,6 +105,14 @@ sh docs/sample/copyscript/copy_proprietary_softwares.sh -f $PKGS_DIR
 unset PKGS_DIR
 ```
 
+RZ/G2L:
+```
+unzip RTK0EF0045Z13001ZJ-v0.51_EN.zip
+cd RTK0EF0045Z13001ZJ-v0.51_EN/proprietary
+./copy_gfx_mmp.sh ../../
+```
+
+
 5. Execute source command
 ```
 cd $WORK
@@ -83,8 +120,14 @@ source poky/oe-init-build-env
 ```
 
 6. Copy build configuration files
+RZ/G2M:
 ```
 cp $WORK/meta-renesas-ai-demos/meta-shopping-basket-demo/templates/hihope-rzg2m/* $WORK/build/conf/
+```
+
+RZ/G2L:
+```
+cp $WORK/meta-renesas-ai-demos/meta-shopping-basket-demo/templates/smarc-rzg2l/* $WORK/build/conf/
 ```
 
 7. (optional) Use the following commands in `$WORK/build/conf/local.conf` to edit the demo source version:
