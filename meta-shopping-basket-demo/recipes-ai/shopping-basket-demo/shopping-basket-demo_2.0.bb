@@ -1,5 +1,5 @@
 SUMMARY = "Shopping Basket Demo"
-DESCRIPTION = "Build and install the RZ/G2 Object Detection Shopping Basket Demo application"
+DESCRIPTION = "Build and install the RZ/G2 Shopping Basket Demo application"
 
 inherit populate_sdk_qt5
 require recipes-qt/qt5/qt5.inc
@@ -24,7 +24,7 @@ SRC_URI = " \
 	file://populate_scripts.sh \
 "
 
-SRCREV_shopping-basket-demo ?= "6351aa022b3692e5756693a31b1b2ec370b0af54"
+SRCREV_shopping-basket-demo ?= "5e5e166e1cbe93775c23b9e3f0c25c7e57895e54"
 
 S = "${WORKDIR}/git"
 

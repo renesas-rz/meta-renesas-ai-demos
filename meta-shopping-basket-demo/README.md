@@ -255,6 +255,7 @@ run inference on the webcam stream.
     * Inference is automatically run on the image and the results are displayed.
 * Click the arrows on the "Threads" spinbox to dynamically change the number of
 threads used for inference.
+* Click "About->Hardware" to read the board information.
 * Click "About->License" to read the GPLv2 license that this app is licensed
 under.
 * Click "Camera->Reset" to reset the connection to the webcam.
