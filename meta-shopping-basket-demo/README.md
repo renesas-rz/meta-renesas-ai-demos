@@ -57,7 +57,7 @@ git checkout -b tmp c1b0c9f546289b1592d7a895640de103723a0305
 cd $WORK/meta-rzg2
 git checkout -b tmp BSP-1.0.8
 cd $WORK/meta-renesas-ai
-git checkout -b tmp 459771e4ba3699fc87a1bcb19252d2c341f50701
+git checkout -b tmp c12a82c9ccee6b38b86fb01c1ee4da6281970134
 ```
 
 RZ/G2L:
@@ -73,7 +73,7 @@ git checkout -b tmp c1b0c9f546289b1592d7a895640de103723a0305
 cd $WORK/meta-rzg2
 git checkout -b tmp b56a64c9badcb8cd43d286bbe0f57ac97fb465fc
 cd $WORK/meta-renesas-ai
-git checkout -b tmp 459771e4ba3699fc87a1bcb19252d2c341f50701
+git checkout -b tmp c12a82c9ccee6b38b86fb01c1ee4da6281970134
 ```
 
 3. Download proprietary software packages from RZ/G Marketplace
