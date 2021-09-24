@@ -242,24 +242,14 @@ Alternatively, use the GUI buttons on the top left to start the demo.
 
 
 ## How to use the demo
-* Click "Load Image" to load an image from the filesystem. Supported formats are
-bmp, jpg, and png.
+* Click "Process Basket" to capture an image from the webcam stream.
     * Inference is automatically run on the image and the results are displayed.
-* Click "Load Webcam" to load a webcam stream.
-    * Once the webcam stream has been loaded, the "Continuous" checkbox will be
-available to check. Clicking on "Run" with the checkbox disabled will run
-inference once, while clicking "Run" with the checkbox enabled will continuously
-run inference on the webcam stream.
-    * Clicking "Stop" will stop continuous inference if activated.
-* Click "Capture Image" to capture an image from the webcam stream.
-    * Inference is automatically run on the image and the results are displayed.
-* Click the arrows on the "Threads" spinbox to dynamically change the number of
-threads used for inference.
 * Click "About->Hardware" to read the board information.
 * Click "About->License" to read the GPLv2 license that this app is licensed
 under.
-* Click "Camera->Reset" to reset the connection to the webcam.
-* Click "Camera->Disconnect" to disconnect the currently connected webcam."
+* Click "About->Exit" to close the application.
+* Click "Inference->Enable/Disable ArmNN Delegate" to enable or disable ArmNN
+Delegate during inference.
 
 Expected results:
 * Boxes are drawn around the detected items.
@@ -268,3 +258,5 @@ Expected results:
 * Names and prices for each item are shown in an alphabetical list on the
 right-hand side of the application.
 * Total cost is shown in the bottom right hand-side.
+* Total items and inference time is shown in the top right-hand corner of
+the application.
