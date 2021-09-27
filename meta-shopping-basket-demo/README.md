@@ -132,9 +132,9 @@ cp $WORK/meta-renesas-ai-demos/meta-shopping-basket-demo/templates/smarc-rzg2l/*
 
 7. (optional) Use the following commands in `$WORK/build/conf/local.conf` to edit the demo source version:
 ```
-SHOPPING_DEMO_REPO = "github.com/renesas-rz/rzg-shopping-basket-demo.git"
-SHOPPING_DEMO_REPO_PROTOCOL = "https"
-SHOPPING_DEMO_REPO_BRANCH = "master"
+SHOPPING_BASKET_DEMO_REPO = "github.com/renesas-rz/rzg-shopping-basket-demo.git"
+SHOPPING_BASKET_DEMO_REPO_PROTOCOL = "https"
+SHOPPING_BASKET_DEMO_REPO_BRANCH = "master"
 SRCREV_shopping-basket-demo = "6351aa022b3692e5756693a31b1b2ec370b0af54" # Can be set to "${AUTOREV}" for the latest version.
 ```
 
