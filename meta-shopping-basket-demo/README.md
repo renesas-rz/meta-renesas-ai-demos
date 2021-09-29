@@ -1,11 +1,9 @@
 # meta-shopping-basket-demo
 This OpenEmbedded/Yocto layer adds support for the Renesas FOSS (Free Open
-Source Software) Object Detection Shopping Basket Demo to the RZ/G2M HiHope
-Linux platform.
-
+Source Software) Shopping Basket Demo to the RZ/G2L SMARC evaluation kit.
 
 This meta-layer adds all dependencies and installs the Qt based demo application
-into the final RFS. The demo itself is compiled seperately using qmake. The
+into the final RFS. The demo itself can be compiled seperately using qmake. The
 source code for the demo application can be found here:
 **https://github.com/renesas-rz/rzg-shopping-basket-demo.git**
 
@@ -15,16 +13,16 @@ The demo is based on the Renesas RZ/G AI BSP which is published on GitHub:
 
 
 Supported Platforms:
-- Renesas RZ/G2M hihope-rzg2m
 - Renesas RZ/G2L smarc-rzg2l
 
 
 ## Build Instructions
 **Build machine dependencies**
-- Ubuntu 16.04 LTS
+- Ubuntu 20.04 LTS
 - Installed packages: gawk wget git-core diffstat unzip texinfo gcc-multilib
-build-essential chrpath socat libsdl1.2-dev xterm cpio python python3
-python3-pip python3-pexpect xz-utils debianutils iputils-ping
+build-essential chrpath socat cpio python3 python3-pip python3-pexpect
+xz-utils debianutils iputils-ping python3-git python3-jinja2
+libegl1-mesa libsdl1.2-dev pylint3 xterm
 
 1. Clone required repositories
 ```
@@ -33,7 +31,6 @@ mkdir -p $WORK
 cd $WORK
 git clone git://git.yoctoproject.org/poky.git
 git clone git://git.openembedded.org/meta-openembedded.git
-git clone git://git.linaro.org/openembedded/meta-linaro.git
 git clone git://git.yoctoproject.org/meta-gplv2.git
 git clone https://github.com/meta-qt5/meta-qt5.git
 git clone https://github.com/renesas-rz/meta-rzg2.git
@@ -42,23 +39,6 @@ git clone https://github.com/renesas-rz/meta-renesas-ai-demos.git
 ```
 
 2. Checkout specific versions
-RZ/G2M:
-```
-cd $WORK/poky
-git checkout -b tmp 7e7ee662f5dea4d090293045f7498093322802cc
-cd $WORK/meta-openembedded
-git checkout -b tmp 352531015014d1957d6444d114f4451e241c4d23
-cd $WORK/meta-linaro
-git checkout -b tmp 75dfb67bbb14a70cd47afda9726e2e1c76731885
-cd $WORK/meta-gplv2
-git checkout -b tmp f875c60ecd6f30793b80a431a2423c4b98e51548
-cd $WORK/meta-qt5
-git checkout -b tmp c1b0c9f546289b1592d7a895640de103723a0305
-cd $WORK/meta-rzg2
-git checkout -b tmp BSP-1.0.8
-cd $WORK/meta-renesas-ai
-git checkout -b tmp c12a82c9ccee6b38b86fb01c1ee4da6281970134
-```
 
 RZ/G2L:
 ```
@@ -77,15 +57,6 @@ git checkout -b tmp c12a82c9ccee6b38b86fb01c1ee4da6281970134
 ```
 
 3. Download proprietary software packages from RZ/G Marketplace
-RZ/G2M:
-```
-(Evaluation version)
-America: https://www.renesas.com/us/en/products/rzg-linux-platform/rzg-marcketplace/verified-linux-package/rzg2-mlp-eva.html
-Europe: https://www.renesas.com/eu/en/products/rzg-linux-platform/rzg-marcketplace/verified-linux-package/rzg2-mlp-eva.html
-Asia: https://www.renesas.com/sg/en/products/rzg-linux-platform/rzg-marcketplace/verified-linux-package/rzg2-mlp-eva.html
-Japan: https://www.renesas.com/jp/ja/products/rzg-linux-platform/rzg-marcketplace/verified-linux-package/rzg2-mlp-eva.html
-```
-
 RZ/G2L:
 ```
 America: https://www.renesas.com/us/en/products/microcontrollers-microprocessors/rz-arm-based-high-end-32-64-bit-mpus/rzg2l-general-purpose-microprocessors-dual-core-arm-cortex-a55-12-ghz-cpus-3d-graphics-and-video-codec
@@ -94,24 +65,13 @@ Asia: https://www.renesas.com/sg/en/products/microcontrollers-microprocessors/rz
 Japan: https://www.renesas.com/jp/ja/products/microcontrollers-microprocessors/rz-arm-based-high-end-32-64-bit-mpus/rzg2l-general-purpose-microprocessors-dual-core-arm-cortex-a55-12-ghz-cpus-3d-graphics-and-video-codec
 ```
 
-
 4. Extract and copy proprietary libraries
-RZ/G2M:
-```
-tar -C $WORK -zxf $WORK/RZG2_Group_*_Software_Package_for_Linux_*.tar.gz
-export PKGS_DIR=$WORK/proprietary
-cd $WORK/meta-rzg2
-sh docs/sample/copyscript/copy_proprietary_softwares.sh -f $PKGS_DIR
-unset PKGS_DIR
-```
-
 RZ/G2L:
 ```
 unzip RTK0EF0045Z13001ZJ-v0.51_EN.zip
 cd RTK0EF0045Z13001ZJ-v0.51_EN/proprietary
 ./copy_gfx_mmp.sh ../../
 ```
-
 
 5. Execute source command
 ```
@@ -120,11 +80,6 @@ source poky/oe-init-build-env
 ```
 
 6. Copy build configuration files
-RZ/G2M:
-```
-cp $WORK/meta-renesas-ai-demos/meta-shopping-basket-demo/templates/hihope-rzg2m/* $WORK/build/conf/
-```
-
 RZ/G2L:
 ```
 cp $WORK/meta-renesas-ai-demos/meta-shopping-basket-demo/templates/smarc-rzg2l/* $WORK/build/conf/
@@ -134,8 +89,8 @@ cp $WORK/meta-renesas-ai-demos/meta-shopping-basket-demo/templates/smarc-rzg2l/*
 ```
 SHOPPING_BASKET_DEMO_REPO = "github.com/renesas-rz/rzg-shopping-basket-demo.git"
 SHOPPING_BASKET_DEMO_REPO_PROTOCOL = "https"
-SHOPPING_BASKET_DEMO_REPO_BRANCH = "master"
-SRCREV_shopping-basket-demo = "6351aa022b3692e5756693a31b1b2ec370b0af54" # Can be set to "${AUTOREV}" for the latest version.
+SHOPPING_BASKET_DEMO_REPO_BRANCH = "<branch_name>"
+SRCREV_shopping-basket-demo = "<specific_commit_sha>" # Can be set to "${AUTOREV}" for the latest version.
 ```
 
 8. Start build
@@ -145,7 +100,7 @@ bitbake core-image-qt
 
 Once the build is completed, the Kernel, device tree and RFS are located in:
 ```
-$WORK/build/tmp/deploy/images/hihope-rzg2m
+$WORK/build/tmp/deploy/images/smarc-rzg2l
 ```
 
 ## Flashing instructions
@@ -211,7 +166,7 @@ Make the following connections to the host machine:
 * Serial
 
 Make the following peripheral connections:
-* Camera
+* [Coral OV5645 MIPI-CSI Camera](https://coral.ai/products/camera/)
 * Mouse or USB touch
 * HDMI
 * Power
@@ -221,10 +176,10 @@ Then apply power to the board and enter U-Boot.
 ### Set U-Boot configuration environment
 The U-Boot environment can be set from the U-boot terminal.
 
-For the RZ/G2M:
+RZ/G2L:
 ```
-setenv bootargs 'rw root=/dev/mmcblk0p1 rootwait'
-setenv bootcmd 'ext4load mmc 0 0x48080000 Image-hihope-rzg2m.bin; ext4load mmc 0 0x48000000 Image-r8a774a1-hihope-rzg2m-ex.dtb; booti 0x48080000 - 0x48000000'
+setenv bootargs 'rw root=/dev/mmcblk1p1 rootwait'
+setenv bootcmd 'ext4load mmc 0 0x48080000 Image-smarc-rzg2l; ext4load mmc 0 0x48000000 Image-r9a07g044l2-smarc.dtb; booti 0x48080000 - 0x48000000'
 ```
 
 Finally, save the environment and boot:
