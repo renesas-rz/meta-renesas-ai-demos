@@ -8,5 +8,5 @@ cat > "scripts/shopping-basket-demo.sh" <<-EOF
 #!/bin/sh
 
 cd ${INSTALL_DIRECTORY}
-./supermarket_demo_app
+./shoppingbasket_demo_app
 EOF

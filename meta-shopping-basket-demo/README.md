@@ -235,7 +235,7 @@ boot
 
 Once Linux has booted, launch the demo from the terminal
 ```
-/opt/shopping-basket-demo/supermarket_demo_app
+/opt/shopping-basket-demo/shoppingbasket_demo_app
 ```
 
 Alternatively, use the GUI buttons on the top left to start the demo.

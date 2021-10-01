@@ -24,7 +24,7 @@ SRC_URI = " \
 	file://populate_scripts.sh \
 "
 
-SRCREV_shopping-basket-demo ?= "5e5e166e1cbe93775c23b9e3f0c25c7e57895e54"
+SRCREV_shopping-basket-demo ?= "3dc78e4cc13a731e93a4627b7746feb37c9b90ea"
 
 S = "${WORKDIR}/git"
 
@@ -37,7 +37,7 @@ do_install_append () {
 	install -d ${D}${SHOPPING_DEMO_INSTALL_DIRECTORY}/sample_images
 	install -m 444 ${WORKDIR}/sample_images/* ${D}${SHOPPING_DEMO_INSTALL_DIRECTORY}/sample_images
 	install -m 444 ${WORKDIR}/shoppingBasketDemo.tflite ${D}${SHOPPING_DEMO_INSTALL_DIRECTORY}
-	install -m 555 ${B}/supermarket_demo_app ${D}${SHOPPING_DEMO_INSTALL_DIRECTORY}
+	install -m 555 ${B}/shoppingbasket_demo_app ${D}${SHOPPING_DEMO_INSTALL_DIRECTORY}
 
 	if echo "${BBLAYERS}" | grep -wq "meta-ai-demos-common" ; then
 		install -d ${D}${SHOPPING_DEMO_INSTALL_DIRECTORY}/icons
