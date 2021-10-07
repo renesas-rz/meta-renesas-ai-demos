@@ -1,6 +1,7 @@
 # meta-shopping-basket-demo
 This OpenEmbedded/Yocto layer adds support for the Renesas FOSS (Free Open
-Source Software) Shopping Basket Demo to the RZ/G2L SMARC evaluation kit.
+Source Software) Shopping Basket Demo to the RZ/G2E ek874 Linux platform and
+RZ/G2L SMARC evaluation kit.
 
 This meta-layer adds all dependencies and installs the Qt based demo application
 into the final RFS. The demo itself can be compiled seperately using qmake. The
@@ -13,8 +14,8 @@ The demo is based on the Renesas RZ/G AI BSP which is published on GitHub:
 
 
 Supported Platforms:
+- Renesas RZ/G2E ek874
 - Renesas RZ/G2L smarc-rzg2l
-
 
 ## Build Instructions
 **Build machine dependencies**
@@ -38,7 +39,30 @@ git clone https://github.com/renesas-rz/meta-renesas-ai.git
 git clone https://github.com/renesas-rz/meta-renesas-ai-demos.git
 ```
 
+RZ/G2E:
+```
+git clone git://git.linaro.org/openembedded/meta-linaro.git
+```
+
 2. Checkout specific versions
+
+RZ/G2E:
+```
+cd $WORK/poky
+git checkout -b tmp 7e7ee662f5dea4d090293045f7498093322802cc
+cd $WORK/meta-openembedded
+git checkout -b tmp 352531015014d1957d6444d114f4451e241c4d23
+cd $WORK/meta-linaro
+git checkout -b tmp 75dfb67bbb14a70cd47afda9726e2e1c76731885
+cd $WORK/meta-gplv2
+git checkout -b tmp f875c60ecd6f30793b80a431a2423c4b98e51548
+cd $WORK/meta-qt5
+git checkout -b tmp c1b0c9f546289b1592d7a895640de103723a0305
+cd $WORK/meta-rzg2
+git checkout -b tmp BSP-1.0.8
+cd $WORK/meta-renesas-ai
+git checkout -b tmp c12a82c9ccee6b38b86fb01c1ee4da6281970134
+```
 
 RZ/G2L:
 ```
@@ -61,6 +85,15 @@ git am $WORK/meta-renesas-ai-demos/patches/meta-rzg2/dunfell-rzg2l/0001-Enable-R
 ```
 
 3. Download proprietary software packages from RZ/G website
+
+RZ/G2E:
+```
+America: https://www.renesas.com/us/en/products/rzg-linux-platform/rzg-marcketplace/verified-linux-package/rzg2-mlp-eva.html
+Europe: https://www.renesas.com/eu/en/products/rzg-linux-platform/rzg-marcketplace/verified-linux-package/rzg2-mlp-eva.html
+Asia: https://www.renesas.com/sg/en/products/rzg-linux-platform/rzg-marcketplace/verified-linux-package/rzg2-mlp-eva.html
+Japan: https://www.renesas.com/jp/ja/products/rzg-linux-platform/rzg-marcketplace/verified-linux-package/rzg2-mlp-eva.html
+```
+
 RZ/G2L:
 ```
 America: https://www.renesas.com/us/en/products/microcontrollers-microprocessors/rz-arm-based-high-end-32-64-bit-mpus/rzg2l-general-purpose-microprocessors-dual-core-arm-cortex-a55-12-ghz-cpus-3d-graphics-and-video-codec
@@ -70,6 +103,16 @@ Japan: https://www.renesas.com/jp/ja/products/microcontrollers-microprocessors/r
 ```
 
 4. Extract and copy proprietary libraries
+
+RZ/G2E:
+```
+tar -C $WORK -zxf $WORK/RZG2_Group_*_Software_Package_for_Linux_*.tar.gz
+export PKGS_DIR=$WORK/proprietary
+cd $WORK/meta-rzg2
+sh docs/sample/copyscript/copy_proprietary_softwares.sh -f $PKGS_DIR
+unset PKGS_DIR
+```
+
 RZ/G2L:
 ```
 unzip RTK0EF0045Z13001ZJ-v0.51_EN.zip
@@ -84,6 +127,12 @@ source poky/oe-init-build-env
 ```
 
 6. Copy build configuration files
+
+RZ/G2E:
+```
+cp $WORK/meta-renesas-ai-demos/meta-shopping-basket-demo/templates/ek874/* $WORK/build/conf/
+```
+
 RZ/G2L:
 ```
 cp $WORK/meta-renesas-ai-demos/meta-shopping-basket-demo/templates/smarc-rzg2l/* $WORK/build/conf/
@@ -106,6 +155,13 @@ bitbake core-image-qt
 ```
 
 Once the build is completed, the Kernel, device tree and RFS are located in:
+
+RZ/G2E
+```
+$WORK/build/tmp/deploy/images/ek874
+```
+
+RZ/G2L
 ```
 $WORK/build/tmp/deploy/images/smarc-rzg2l
 ```
@@ -182,6 +238,12 @@ Then apply power to the board and enter U-Boot.
 
 ### Set U-Boot configuration environment
 The U-Boot environment can be set from the U-boot terminal.
+
+RZ/G2E:
+```
+setenv bootargs 'rw root=/dev/mmcblk0p1 rootwait'
+setenv bootcmd 'ext4load mmc 0 0x48080000 Image-ek874.bin; ext4load mmc 0 0x48000000 Image-r8a774c0-ek874.dtb; booti 0x48080000 - 0x48000000'
+```
 
 RZ/G2L:
 ```
