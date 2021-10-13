@@ -23,7 +23,8 @@ SRC_URI = " \
 	file://populate_scripts.sh \
 "
 
-SRCREV_shopping-basket-demo ?= "3dc78e4cc13a731e93a4627b7746feb37c9b90ea"
+# SB_v2.0
+SRCREV_shopping-basket-demo ?= "30373d3d8b9d30eba2448b265ca7ca83e6476683"
 
 S = "${WORKDIR}/git"
 
