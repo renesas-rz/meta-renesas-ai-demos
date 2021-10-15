@@ -44,6 +44,7 @@ RZ/G2L:
 ```
 cd $WORK/poky
 git checkout -b tmp dunfell-23.0.5
+git cherry-pick 9e444
 cd $WORK/meta-openembedded
 git checkout -b tmp cc6fc6b1641ab23089c1e3bba11e0c6394f0867c
 cd $WORK/meta-gplv2
@@ -51,12 +52,15 @@ git checkout -b tmp 60b251c25ba87e946a0ca4cdc8d17b1cb09292ac
 cd $WORK/meta-qt5
 git checkout -b tmp c1b0c9f546289b1592d7a895640de103723a0305
 cd $WORK/meta-rzg2
-git checkout -b tmp b56a64c9badcb8cd43d286bbe0f57ac97fb465fc
+git checkout -b tmp rzg2l_bsp_v1.1-update1
 cd $WORK/meta-renesas-ai
 git checkout -b tmp c12a82c9ccee6b38b86fb01c1ee4da6281970134
+cd $WORK/meta-rzg2
+git am $WORK/meta-renesas-ai/patches/meta-rzg2/dunfell-rzg2l/0001-cip-core.inc-Fix-recipes-debian-BBMASK.patch
+git am $WORK/meta-renesas-ai-demos/patches/meta-rzg2/dunfell-rzg2l/0001-Enable-RZ-G2L-Qt-SDK-builds.patch
 ```
 
-3. Download proprietary software packages from RZ/G Marketplace
+3. Download proprietary software packages from RZ/G website
 RZ/G2L:
 ```
 America: https://www.renesas.com/us/en/products/microcontrollers-microprocessors/rz-arm-based-high-end-32-64-bit-mpus/rzg2l-general-purpose-microprocessors-dual-core-arm-cortex-a55-12-ghz-cpus-3d-graphics-and-video-codec
@@ -84,6 +88,9 @@ RZ/G2L:
 ```
 cp $WORK/meta-renesas-ai-demos/meta-shopping-basket-demo/templates/smarc-rzg2l/* $WORK/build/conf/
 ```
+
+Enable the `LICENSE_FLAGS_WHITELIST` line in local.conf.
+
 
 7. (optional) Use the following commands in `$WORK/build/conf/local.conf` to edit the demo source version:
 ```
