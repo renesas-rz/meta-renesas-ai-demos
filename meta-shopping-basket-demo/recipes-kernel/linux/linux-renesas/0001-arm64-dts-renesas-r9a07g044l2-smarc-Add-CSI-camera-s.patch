@@ -1,24 +1,30 @@
-From 8479e2e89a8241f087d5403abe65f02363feffbd Mon Sep 17 00:00:00 2001
-From: Fabrizio Castro <fabrizio.castro.jz@renesas.com>
-Date: Thu, 23 Sep 2021 14:50:39 +0100
+From 0bbe289e1573f25eec5c59cadcfb02eeea0ff0d5 Mon Sep 17 00:00:00 2001
+From: Gareth Williams <gareth.williams.jx@renesas.com>
+Date: Wed, 20 Oct 2021 10:07:09 +0100
 Subject: [PATCH] arm64: dts: renesas: r9a07g044l2-smarc: Add CSI camera
  support
 
-This commit adds DT support for the CSI camera.
+This commit adds DT support for the CSI camera. Ported to BSP v1.3
+from BSP v1.1-update1.
 
 Signed-off-by: Fabrizio Castro <fabrizio.castro.jz@renesas.com>
+Signed-off-by: Gareth Williams <gareth.williams.jx@renesas.com>
 ---
- .../boot/dts/renesas/r9a07g044l2-smarc.dts    | 81 +++++++++++++++++++
- 1 file changed, 81 insertions(+)
+ arch/arm64/boot/dts/renesas/r9a07g044l2-smarc.dts | 85 ++++++++++++++++++++++-
+ 1 file changed, 84 insertions(+), 1 deletion(-)
 
 diff --git a/arch/arm64/boot/dts/renesas/r9a07g044l2-smarc.dts b/arch/arm64/boot/dts/renesas/r9a07g044l2-smarc.dts
-index 008046e1fb17..ea887e27d6b5 100644
+index b586e2b..b0a4234 100644
 --- a/arch/arm64/boot/dts/renesas/r9a07g044l2-smarc.dts
 +++ b/arch/arm64/boot/dts/renesas/r9a07g044l2-smarc.dts
-@@ -51,5 +51,86 @@
-                 compatible = "renesas,vspm_if";
-         };
+@@ -47,7 +47,90 @@
+ 	};
  
+ 	vspm_if {
+-			compatible = "renesas,vspm_if";
++		compatible = "renesas,vspm_if";
++	};
++
 +	clk_ext_camera: clk_ext_camera {
 +		compatible = "fixed-clock";
 +		#clock-cells = <0>;
@@ -52,8 +58,8 @@ index 008046e1fb17..ea887e27d6b5 100644
 +
 +&cru {
 +	status = "okay";
- };
- 
++};
++
 +&csi2 {
 +	status = "okay";
 +
@@ -100,8 +106,9 @@ index 008046e1fb17..ea887e27d6b5 100644
 +	i2c0_pins: i2c0 {
 +		pins = "RIIC0_SDA", "RIIC0_SCL";
 +		input-enable;
-+	};
-+};
+ 	};
+ };
+ 
 -- 
-2.25.1
+2.7.4
 
