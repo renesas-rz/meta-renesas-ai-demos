@@ -1,3 +1,6 @@
+# Original source:
+# https://cgit.openembedded.org/meta-openembedded/tree/meta-oe/recipes-support/opencv/ade_0.1.1f.bb?h=dunfell
+
 SUMMARY = "A graph construction, manipulation, and processing framework"
 DESCRIPTION = "ADE Framework is a graph construction, manipulation, \
 and processing framework. ADE Framework is suitable for \
@@ -5,7 +8,8 @@ organizing data flow processing and execution."
 HOMEPAGE = "https://github.com/opencv/ade"
 
 SRC_URI = "git://github.com/opencv/ade.git \
-           "
+	   file://0001-use-GNUInstallDirs-for-detecting-install-paths.patch \
+	   "
 
 SRCREV = "58b2595a1a95cc807be8bf6222f266a9a1f393a9"
 
