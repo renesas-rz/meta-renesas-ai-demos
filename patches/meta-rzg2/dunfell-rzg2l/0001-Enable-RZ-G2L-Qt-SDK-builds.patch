@@ -1,18 +1,16 @@
-From 047f4564a32ea47e12c970ea4a719f08c25c95d9 Mon Sep 17 00:00:00 2001
+From 72741aae81f7b6a06cc1e6a841fcd9eb009339d9 Mon Sep 17 00:00:00 2001
 From: Gareth Williams <gareth.williams.jx@renesas.com>
-Date: Wed, 25 Aug 2021 11:57:34 +0100
+Date: Tue, 2 Nov 2021 15:26:59 +0000
 Subject: [PATCH] Enable RZ/G2L Qt SDK builds
 
 Signed-off-by: Gareth Williams <gareth.williams.jx@renesas.com>
 ---
  .../qt5-layer/images/core-image-qt-sdk.bb          | 30 ++++++++++++++++++++++
- dynamic-layers/qt5-layer/qt5/qt5.6.3_git.inc       |  9 ++++---
- dynamic-layers/qt5-layer/qt5/qtbase_git.bbappend   |  4 +--
- 3 files changed, 36 insertions(+), 7 deletions(-)
- create mode 100755 dynamic-layers/qt5-layer/images/core-image-qt-sdk.bb
+ 1 file changed, 30 insertions(+)
+ create mode 100644 dynamic-layers/qt5-layer/images/core-image-qt-sdk.bb
 
 diff --git a/dynamic-layers/qt5-layer/images/core-image-qt-sdk.bb b/dynamic-layers/qt5-layer/images/core-image-qt-sdk.bb
-new file mode 100755
+new file mode 100644
 index 0000000..706e3a8
 --- /dev/null
 +++ b/dynamic-layers/qt5-layer/images/core-image-qt-sdk.bb
@@ -47,44 +45,6 @@ index 0000000..706e3a8
 +        fi
 +}
 +ROOTFS_POSTPROCESS_COMMAND += 'setup_qt_env;'
-diff --git a/dynamic-layers/qt5-layer/qt5/qt5.6.3_git.inc b/dynamic-layers/qt5-layer/qt5/qt5.6.3_git.inc
-index d316a12..836de16 100644
---- a/dynamic-layers/qt5-layer/qt5/qt5.6.3_git.inc
-+++ b/dynamic-layers/qt5-layer/qt5/qt5.6.3_git.inc
-@@ -1,6 +1,7 @@
- PV = "5.6.3+git${SRCPV}"
- 
--RDEPENDS_${PN} += " mali-user-module"
--RDEPENDS_${PN}-tools += " mali-user-module"
--RDEPENDS_${PN}-examples += " mali-user-module"
--RDEPENDS_${PN}-plugins += " mali-user-module libdrm"
-+#RDEPENDS_${PN} += " mali-user-module"
-+#RDEPENDS_${PN}-tools += " mali-user-module"
-+#RDEPENDS_${PN}-examples += " mali-user-module"
-+#RDEPENDS_${PN}-plugins += " mali-user-module libdrm"
-+RDEPENDS_${PN}-plugins += " libdrm"
-diff --git a/dynamic-layers/qt5-layer/qt5/qtbase_git.bbappend b/dynamic-layers/qt5-layer/qt5/qtbase_git.bbappend
-index 2055311..91b0eeb 100644
---- a/dynamic-layers/qt5-layer/qt5/qtbase_git.bbappend
-+++ b/dynamic-layers/qt5-layer/qt5/qtbase_git.bbappend
-@@ -23,7 +23,7 @@ SRC_URI_append = " \
- # switch to GLES 2 support
- PACKAGECONFIG_GL = "${@bb.utils.contains('DISTRO_FEATURES', 'opengl', 'gles2', '', d)}"
- 
--DEP = " mali-user-module ${@bb.utils.contains('DISTRO_FEATURES', 'opengl', 'mali-user-module', '', d)} \
-+DEP = " ${@bb.utils.contains('DISTRO_FEATURES', 'opengl', 'mali-user-module', '', d)} \
-        mtdev libxkbcommon freetype fontconfig libinput libproxy"
- RDEPENDS_${PN} += "${DEP}"
- RDEPENDS_${PN}-plugins += "${DEP}"
-@@ -52,8 +52,6 @@ PACKAGECONFIG_CONFARGS_append += "\
- 	${CONF_ADD_WAYLAND} \
- "
- 
--DEPENDS_append = " mali-user-module"
--
- # add necessary packages
- PACKAGECONFIG_append += " sm linuxfb gles2"
- 
 -- 
 2.7.4
 
