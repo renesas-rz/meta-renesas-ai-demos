@@ -268,6 +268,7 @@ Alternatively, use the GUI buttons on the top left to start the demo.
 ## How to use the demo
 * Click "Process Basket" to capture an image from the webcam stream.
     * Inference is automatically run on the image and the results are displayed.
+* Click "Next Basket" to clear inference results and resume live camera feed.
 * Click "About->Hardware" to read the board information.
 * Click "About->License" to read the GPLv2 license that this app is licensed
 under.
