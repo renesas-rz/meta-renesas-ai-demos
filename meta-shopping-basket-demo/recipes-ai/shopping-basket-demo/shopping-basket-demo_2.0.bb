@@ -20,6 +20,7 @@ SRC_URI = " \
 	git://${SHOPPING_BASKET_DEMO_REPO};protocol=${SHOPPING_BASKET_DEMO_REPO_PROTOCOL};branch=${SHOPPING_BASKET_DEMO_REPO_BRANCH};name=shopping-basket-demo \
 	file://shoppingBasketDemo.tflite \
 	file://icons/ \
+	file://logos/ \
 	file://populate_scripts.sh \
 "
 
@@ -34,6 +35,8 @@ do_configure_prepend () {
 
 do_install_append () {
 	install -d ${D}${SHOPPING_BASKET_DEMO_INSTALL_DIRECTORY}
+	install -d ${D}${SHOPPING_BASKET_DEMO_INSTALL_DIRECTORY}/logos
+	install -m 444 ${WORKDIR}/logos/* ${D}${SHOPPING_BASKET_DEMO_INSTALL_DIRECTORY}/logos
 	install -m 444 ${WORKDIR}/shoppingBasketDemo.tflite ${D}${SHOPPING_BASKET_DEMO_INSTALL_DIRECTORY}
 	install -m 555 ${B}/shoppingbasket_demo_app ${D}${SHOPPING_BASKET_DEMO_INSTALL_DIRECTORY}
 
