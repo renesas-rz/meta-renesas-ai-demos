@@ -243,7 +243,7 @@ Make the following connections to the host machine:
 
 Make the following peripheral connections:
 * [Coral OV5645 MIPI-CSI Camera](https://coral.ai/products/camera/) (RZ/G2L)
-* OmniVision OV5645 Mipi-CSI Camera (RZ/G2M)
+* OmniVision OV5645 Mipi-CSI Camera (RZ/G2M and RZ/G2E)
 * Mouse or USB touch
 * HDMI
 * Power
