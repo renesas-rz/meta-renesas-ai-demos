@@ -1,7 +1,7 @@
 # meta-shopping-basket-demo
 This OpenEmbedded/Yocto layer adds support for the Renesas FOSS (Free Open
-Source Software) Shopping Basket Demo to the RZ/G2E ek874 Linux platform and
-RZ/G2L SMARC evaluation kit.
+Source Software) Shopping Basket Demo to the RZ/G2E ek874 and RZ/G2M
+hihope-rzg2m Linux platforms, as well as the RZ/G2L SMARC evaluation kit.
 
 This meta-layer adds all dependencies and installs the Qt based demo application
 into the final RFS. The demo itself can be compiled seperately using qmake. The
@@ -15,6 +15,7 @@ The demo is based on the Renesas RZ/G AI BSP which is published on GitHub:
 
 Supported Platforms:
 - Renesas RZ/G2E ek874
+- Renesas RZ/G2M hihope-rzg2m
 - Renesas RZ/G2L smarc-rzg2l
 
 ## Build Instructions
@@ -39,14 +40,14 @@ git clone https://github.com/renesas-rz/meta-renesas-ai.git
 git clone https://github.com/renesas-rz/meta-renesas-ai-demos.git
 ```
 
-RZ/G2E:
+RZ/G2E and RZ/G2M:
 ```
 git clone git://git.linaro.org/openembedded/meta-linaro.git
 ```
 
 2. Checkout specific versions
 
-RZ/G2E:
+RZ/G2E and RZ/G2M:
 ```
 cd $WORK/poky
 git checkout -b tmp 7e7ee662f5dea4d090293045f7498093322802cc
@@ -87,7 +88,7 @@ git am $WORK/meta-renesas-ai/patches/meta-rzg2/dunfell-rzg2l/0001-firmware-pack-
 
 3. Download proprietary software packages from RZ/G website
 
-RZ/G2E:
+RZ/G2E and RZ/G2M:
 ```
 America: https://www.renesas.com/us/en/products/rzg-linux-platform/rzg-marcketplace/verified-linux-package/rzg2-mlp-eva.html
 Europe: https://www.renesas.com/eu/en/products/rzg-linux-platform/rzg-marcketplace/verified-linux-package/rzg2-mlp-eva.html
@@ -104,7 +105,7 @@ Japan: [RTK0EF0045Z13001ZJ-v0.8_EN.zip](https://www.renesas.com/jp/ja/products/m
 
 4. Add the proprietary libraries
 
-RZ/G2E:
+RZ/G2E and RZ/G2M:
 ```
 tar -C $WORK -zxf $WORK/RZG2_Group_*_Software_Package_for_Linux_*.tar.gz
 export PKGS_DIR=$WORK/proprietary
@@ -135,6 +136,11 @@ RZ/G2E:
 cp $WORK/meta-renesas-ai-demos/meta-shopping-basket-demo/templates/ek874/* $WORK/build/conf/
 ```
 
+RZ/G2M:
+```
+cp $WORK/meta-renesas-ai-demos/meta-shopping-basket-demo/templates/hihope-rzg2m/* $WORK/build/conf/
+```
+
 RZ/G2L:
 ```
 cp $WORK/meta-renesas-ai-demos/meta-shopping-basket-demo/templates/smarc-rzg2l/* $WORK/build/conf/
@@ -161,6 +167,11 @@ Once the build is completed, the Kernel, device tree and RFS are located in:
 RZ/G2E
 ```
 $WORK/build/tmp/deploy/images/ek874
+```
+
+RZ/G2M
+```
+$WORK/build/tmp/deploy/images/hihope-rzg2m
 ```
 
 RZ/G2L
@@ -231,7 +242,8 @@ Make the following connections to the host machine:
 * Serial
 
 Make the following peripheral connections:
-* [Coral OV5645 MIPI-CSI Camera](https://coral.ai/products/camera/)
+* [Coral OV5645 MIPI-CSI Camera](https://coral.ai/products/camera/) (RZ/G2L)
+* OmniVision OV5645 Mipi-CSI Camera (RZ/G2M)
 * Mouse or USB touch
 * HDMI
 * Power
@@ -245,6 +257,12 @@ RZ/G2E:
 ```
 setenv bootargs 'rw root=/dev/mmcblk0p1 rootwait'
 setenv bootcmd 'ext4load mmc 0 0x48080000 Image-ek874.bin; ext4load mmc 0 0x48000000 Image-r8a774c0-ek874.dtb; booti 0x48080000 - 0x48000000'
+```
+
+RZ/G2M:
+```
+setenv bootargs 'rw root=/dev/mmcblk0p1 rootwait'
+setenv bootcmd 'ext4load mmc 0 0x48080000 Image-hihope-rzg2m.bin; ext4load mmc 0 0x48000000 Image-r8a774a1-hihope-rzg2m-ex-mipi-2.1.dtb; booti 0x48080000 - 0x48000000'
 ```
 
 RZ/G2L:
