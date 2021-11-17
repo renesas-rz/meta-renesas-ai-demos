@@ -305,3 +305,10 @@ right-hand side of the application.
 * Total cost is shown in the bottom right hand-side.
 * Total items and inference time is shown in the top right-hand corner of
 the application.
+
+
+## Notes
+### OV5645 camera sensor
+The CMOS camera sensor (OV5645) is no longer available, and should not be used
+for mass production.  
+Any software support provided is for evaluation purposes only.
