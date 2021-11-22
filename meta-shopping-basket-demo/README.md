@@ -1,7 +1,8 @@
 # meta-shopping-basket-demo
 This OpenEmbedded/Yocto layer adds support for the Renesas FOSS (Free Open
 Source Software) Shopping Basket Demo to the RZ/G2E ek874 and RZ/G2M
-hihope-rzg2m Linux platforms, as well as the RZ/G2L SMARC evaluation kit.
+hihope-rzg2m Linux platforms, as well as the RZ/G2L and RZ/G2LC SMARC evaluation
+kits.
 
 This meta-layer adds all dependencies and installs the Qt based demo application
 into the final RFS. The demo itself can be compiled seperately using qmake. The
@@ -17,6 +18,7 @@ Supported Platforms:
 - Renesas RZ/G2E ek874
 - Renesas RZ/G2M hihope-rzg2m
 - Renesas RZ/G2L smarc-rzg2l
+- Renesas RZ/G2LC smarc-rzg2lc
 
 ## Build Instructions
 **Build machine dependencies**
@@ -65,7 +67,7 @@ cd $WORK/meta-renesas-ai
 git checkout -b tmp v4.4.0
 ```
 
-RZ/G2L:
+RZ/G2L and RZ/G2LC:
 ```
 cd $WORK/poky
 git checkout -b tmp dunfell-23.0.5
@@ -94,7 +96,7 @@ Asia: https://www.renesas.com/sg/en/products/rzg-linux-platform/rzg-marcketplace
 Japan: https://www.renesas.com/jp/ja/products/rzg-linux-platform/rzg-marcketplace/verified-linux-package/rzg2-mlp-eva.html
 ```
 
-RZ/G2L:  
+RZ/G2L and RZ/G2LC:
 America: [RTK0EF0045Z13001ZJ-v0.8_EN.zip](https://www.renesas.com/us/en/products/microcontrollers-microprocessors/rz-arm-based-high-end-32-64-bit-mpus/rzg2l-mali-graphic-library-evaluation-version), [RTK0EF0045Z15001ZJ-v0.51_EN.zip](https://www.renesas.com/us/en/software-tool/rzg2l-video-codec-library-evaluation-version-v051)  
 Europe: [RTK0EF0045Z13001ZJ-v0.8_EN.zip](https://www.renesas.com/eu/en/products/microcontrollers-microprocessors/rz-arm-based-high-end-32-64-bit-mpus/rzg2l-mali-graphic-library-evaluation-version), [RTK0EF0045Z15001ZJ-v0.51_EN.zip](https://www.renesas.com/eu/en/software-tool/rzg2l-video-codec-library-evaluation-version-v051)  
 Asia: [RTK0EF0045Z13001ZJ-v0.8_EN.zip](https://www.renesas.com/sg/en/products/microcontrollers-microprocessors/rz-arm-based-high-end-32-64-bit-mpus/rzg2l-mali-graphic-library-evaluation-version), [RTK0EF0045Z15001ZJ-v0.51_EN.zip](https://www.renesas.com/sg/en/software-tool/rzg2l-video-codec-library-evaluation-version-v051)  
@@ -112,7 +114,7 @@ sh docs/sample/copyscript/copy_proprietary_softwares.sh -f $PKGS_DIR
 unset PKGS_DIR
 ```
 
-RZ/G2L:
+RZ/G2L and RZ/G2LC:
 ```
 cd $WORK
 unzip RTK0EF0045Z15001ZJ-v0.51_EN.zip
@@ -142,6 +144,10 @@ cp $WORK/meta-renesas-ai-demos/meta-shopping-basket-demo/templates/hihope-rzg2m/
 RZ/G2L:
 ```
 cp $WORK/meta-renesas-ai-demos/meta-shopping-basket-demo/templates/smarc-rzg2l/* $WORK/build/conf/
+```
+RZ/G2LC:
+```
+cp $WORK/meta-renesas-ai-demos/meta-shopping-basket-demo/templates/smarc-rzg2lc/* $WORK/build/conf/
 ```
 
 Enable the `LICENSE_FLAGS_WHITELIST` line in local.conf.
@@ -175,6 +181,11 @@ $WORK/build/tmp/deploy/images/hihope-rzg2m
 RZ/G2L
 ```
 $WORK/build/tmp/deploy/images/smarc-rzg2l
+```
+
+RZ/G2LC
+```
+$WORK/build/tmp/deploy/images/smarc-rzg2lc
 ```
 
 ## Flashing instructions
@@ -240,7 +251,7 @@ Make the following connections to the host machine:
 * Serial
 
 Make the following peripheral connections:
-* [Coral OV5645 MIPI-CSI Camera](https://coral.ai/products/camera/) (RZ/G2L)
+* [Coral OV5645 MIPI-CSI Camera](https://coral.ai/products/camera/) (RZ/G2L and RZ/G2LC)
 * OmniVision OV5645 Mipi-CSI Camera (RZ/G2M and RZ/G2E)
 * Mouse or USB touch
 * HDMI
@@ -267,6 +278,12 @@ RZ/G2L:
 ```
 setenv bootargs 'rw root=/dev/mmcblk1p1 rootwait'
 setenv bootcmd 'ext4load mmc 0 0x48080000 Image-smarc-rzg2l; ext4load mmc 0 0x48000000 Image-r9a07g044l2-smarc.dtb; booti 0x48080000 - 0x48000000'
+```
+
+RZ/G2LC:
+```
+setenv bootargs 'rw root=/dev/mmcblk1p1 rootwait'
+setenv bootcmd 'ext4load mmc 0 0x48080000 Image-smarc-rzg2lc.bin; ext4load mmc 0 0x48000000 r9a07g044c2-smarc-rzg2lc.dtb; booti 0x48080000 - 0x48000000'
 ```
 
 Finally, save the environment and boot:
