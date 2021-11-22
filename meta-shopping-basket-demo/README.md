@@ -77,13 +77,11 @@ git checkout -b tmp 60b251c25ba87e946a0ca4cdc8d17b1cb09292ac
 cd $WORK/meta-qt5
 git checkout -b tmp c1b0c9f546289b1592d7a895640de103723a0305
 cd $WORK/meta-rzg2
-git checkout -b tmp rzg2l_bsp_v1.3
+git checkout -b tmp rzg2l_bsp_v1.3-update1
 cd $WORK/meta-renesas-ai
-git checkout -b tmp v4.4.0
+git checkout -b tmp 3a8a259291e08544b5d916f3f81f82747425b488
 cd $WORK/meta-rzg2
-git am $WORK/meta-renesas-ai/patches/meta-rzg2/dunfell-rzg2l/0001-cip-core.inc-Fix-recipes-debian-BBMASK.patch
 git am $WORK/meta-renesas-ai/patches/meta-rzg2/dunfell-rzg2l/0001-Enable-RZ-G2L-Qt-SDK-builds.patch
-git am $WORK/meta-renesas-ai/patches/meta-rzg2/dunfell-rzg2l/0001-firmware-pack-fix-tf-a-binary-file-not-found.patch
 ```
 
 3. Download proprietary software packages from RZ/G website
