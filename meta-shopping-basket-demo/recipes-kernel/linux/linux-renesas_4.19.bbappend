@@ -17,5 +17,4 @@ SRC_URI_append_ek874 += " \
 SRC_URI_append_smarc-rzg2l += " \
 	file://0001-arm64-dts-renesas-r9a07g044l2-smarc-Add-CSI-camera-s.patch \
 	file://0005-Revert-media-i2c-ov5645-Fix-power-sequence.patch \
-	file://0006-media-rzg2l-cru-correct-the-slot-that-has-been-trans.patch \
 "
