@@ -1,0 +1,93 @@
+From c669813e29002d9edff9715c6ba9597f6c61a30f Mon Sep 17 00:00:00 2001
+From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Date: Thu, 30 Sep 2021 20:31:13 +0100
+Subject: [PATCH] media: i2c: ov5645: Add support for SVGA
+
+Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+---
+ drivers/media/i2c/ov5645.c | 62 ++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 62 insertions(+)
+
+diff --git a/drivers/media/i2c/ov5645.c b/drivers/media/i2c/ov5645.c
+index b913aaa8fa63..ef2be3bab1c6 100644
+--- a/drivers/media/i2c/ov5645.c
++++ b/drivers/media/i2c/ov5645.c
+@@ -490,6 +490,59 @@ static const struct reg_value ov5645_setting_30fps_NTSC_720_480[] = {
+ 	{ 0x4202, 0x00 }
+ };
+ 
++static const struct reg_value ov5645_setting_30fps_800_600[] = {
++	{ 0x3612, 0xa9 },
++	{ 0x3614, 0x50 },
++	{ 0x3618, 0x00 },
++	{ 0x3034, 0x18 },
++	{ 0x3035, 0x11 },
++	{ 0x3036, 0x54 },
++	{ 0x3600, 0x09 },
++	{ 0x3601, 0x43 },
++	{ 0x3708, 0x66 },
++	{ 0x370c, 0xc3 },
++	{ 0x3800, 0x00 },
++	{ 0x3801, 0x00 },
++	{ 0x3802, 0x00 },
++	{ 0x3803, 0x04 },
++	{ 0x3804, 0x0a },
++	{ 0x3805, 0x3f },
++	{ 0x3806, 0x07 },
++	{ 0x3807, 0x9b },
++	{ 0x3808, 0x03 },
++	{ 0x3809, 0x20 },
++	{ 0x380a, 0x02 },
++	{ 0x380b, 0x58 },
++	{ 0x380c, 0x07 },
++	{ 0x380d, 0x68 },
++	{ 0x380e, 0x03 },
++	{ 0x380f, 0xd8 },
++	{ 0x3810, 0x00 },
++	{ 0x3811, 0x10 },
++	{ 0x3812, 0x00 },
++	{ 0x3813, 0x06 },
++	{ 0x3814, 0x31 },
++	{ 0x3815, 0x31 },
++	{ 0x3820, 0x41 },
++	{ 0x3821, 0x07 },
++	{ 0x3a02, 0x03 },
++	{ 0x3a03, 0xd8 },
++	{ 0x3a08, 0x01 },
++	{ 0x3a09, 0xf8 },
++	{ 0x3a0a, 0x01 },
++	{ 0x3a0b, 0xa4 },
++	{ 0x3a0e, 0x02 },
++	{ 0x3a0d, 0x02 },
++	{ 0x3a14, 0x03 },
++	{ 0x3a15, 0xd8 },
++	{ 0x3a18, 0x00 },
++	{ 0x5001, 0xa3 },
++	{ 0x4004, 0x02 },
++	{ 0x4005, 0x18 },
++	{ 0x4300, 0x32 },
++	{ 0x4202, 0x00 }
++};
++
+ static const struct reg_value ov5645_setting_720P_1280_720[] = {
+ 	{ 0x3612, 0xa9 },
+ 	{ 0x3614, 0x50 },
+@@ -758,6 +811,15 @@ static const struct ov5645_mode_info ov5645_mode_info_data[] = {
+ 		.link_freq = 0, /* an index in link_freq[] */
+ 		.max_fps = OV5645_45_FPS
+ 	},
++	{
++		.width = 800,
++		.height = 600,
++		.data = ov5645_setting_30fps_800_600,
++		.data_size = ARRAY_SIZE(ov5645_setting_30fps_800_600),
++		.pixel_clock = 112000000,
++		.link_freq = 0, /* an index in link_freq[] */
++		.max_fps = OV5645_30_FPS
++	},
+ 	{
+ 		.width = 1280,
+ 		.height = 720,
+-- 
+2.17.1
+

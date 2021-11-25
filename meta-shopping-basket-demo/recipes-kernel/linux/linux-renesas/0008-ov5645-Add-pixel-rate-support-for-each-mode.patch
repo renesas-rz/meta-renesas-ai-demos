@@ -1,0 +1,325 @@
+From c6a5a893937d6b86744b3f9a5ade6c3fb71a84ec Mon Sep 17 00:00:00 2001
+From: Biju Das <biju.das.jz@bp.renesas.com>
+Date: Fri, 12 Nov 2021 15:11:33 +0000
+Subject: [PATCH 08/10] ov5645: Add pixel rate support for each mode
+
+Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
+Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+---
+ drivers/media/i2c/ov5645.c | 195 +++++++++++++++++++++++++++++++++++--
+ 1 file changed, 189 insertions(+), 6 deletions(-)
+
+diff --git a/drivers/media/i2c/ov5645.c b/drivers/media/i2c/ov5645.c
+index 40767e4bd80e..b913aaa8fa63 100644
+--- a/drivers/media/i2c/ov5645.c
++++ b/drivers/media/i2c/ov5645.c
+@@ -73,6 +73,30 @@
+ #define OV5645_SDE_SAT_U		0x5583
+ #define OV5645_SDE_SAT_V		0x5584
+ 
++enum ov5645_frame_rate {
++	OV5645_15_FPS = 0,
++	OV5645_30_FPS,
++	OV5645_45_FPS,
++	OV5645_60_FPS,
++	OV5645_NUM_FRAMERATES,
++};
++
++static const int ov5645_framerates[] = {
++	[OV5645_15_FPS] = 15,
++	[OV5645_30_FPS] = 30,
++	[OV5645_45_FPS] = 45,
++	[OV5645_60_FPS] = 60,
++};
++
++struct ov5645_pixfmt {
++	u32 code;
++	u32 colorspace;
++};
++
++static const struct ov5645_pixfmt ov5645_formats[] = {
++	{ MEDIA_BUS_FMT_UYVY8_2X8, V4L2_COLORSPACE_SRGB, },
++};
++
+ struct reg_value {
+ 	u16 reg;
+ 	u8 val;
+@@ -85,6 +109,7 @@ struct ov5645_mode_info {
+ 	u32 data_size;
+ 	u32 pixel_clock;
+ 	u32 link_freq;
++	u32 max_fps;
+ };
+ 
+ struct ov5645 {
+@@ -102,6 +127,8 @@ struct ov5645 {
+ 	struct regulator *analog_regulator;
+ 
+ 	const struct ov5645_mode_info *current_mode;
++	enum ov5645_frame_rate current_fr;
++	struct v4l2_fract frame_interval;
+ 
+ 	struct v4l2_ctrl_handler ctrls;
+ 	struct v4l2_ctrl *pixel_clock;
+@@ -117,6 +144,7 @@ struct ov5645 {
+ 
+ 	struct gpio_desc *enable_gpio;
+ 	struct gpio_desc *rst_gpio;
++	bool streaming;
+ };
+ 
+ static inline struct ov5645 *to_ov5645(struct v4l2_subdev *sd)
+@@ -718,7 +746,8 @@ static const struct ov5645_mode_info ov5645_mode_info_data[] = {
+ 		.data = ov5645_setting_VGA_640_480,
+ 		.data_size = ARRAY_SIZE(ov5645_setting_VGA_640_480),
+ 		.pixel_clock = 112000000,
+-		.link_freq = 0 /* an index in link_freq[] */
++		.link_freq = 0, /* an index in link_freq[] */
++		.max_fps = OV5645_30_FPS
+ 	},
+ 	{
+ 		.width = 720,
+@@ -726,7 +755,8 @@ static const struct ov5645_mode_info ov5645_mode_info_data[] = {
+ 		.data = ov5645_setting_30fps_NTSC_720_480,
+ 		.data_size = ARRAY_SIZE(ov5645_setting_30fps_NTSC_720_480),
+ 		.pixel_clock = 112000000,
+-		.link_freq = 0 /* an index in link_freq[] */
++		.link_freq = 0, /* an index in link_freq[] */
++		.max_fps = OV5645_45_FPS
+ 	},
+ 	{
+ 		.width = 1280,
+@@ -734,7 +764,8 @@ static const struct ov5645_mode_info ov5645_mode_info_data[] = {
+ 		.data = ov5645_setting_720P_1280_720,
+ 		.data_size = ARRAY_SIZE(ov5645_setting_720P_1280_720),
+ 		.pixel_clock = 112000000,
+-		.link_freq = 0 /* an index in link_freq[] */
++		.link_freq = 0, /* an index in link_freq[] */
++		.max_fps = OV5645_60_FPS
+ 	},
+ 	{
+ 		.width = 1280,
+@@ -742,7 +773,8 @@ static const struct ov5645_mode_info ov5645_mode_info_data[] = {
+ 		.data = ov5645_setting_sxga,
+ 		.data_size = ARRAY_SIZE(ov5645_setting_sxga),
+ 		.pixel_clock = 112000000,
+-		.link_freq = 0 /* an index in link_freq[] */
++		.link_freq = 0, /* an index in link_freq[] */
++		.max_fps = OV5645_30_FPS
+ 	},
+ 	{
+ 		.width = 1920,
+@@ -750,7 +782,8 @@ static const struct ov5645_mode_info ov5645_mode_info_data[] = {
+ 		.data = ov5645_setting_1080p,
+ 		.data_size = ARRAY_SIZE(ov5645_setting_1080p),
+ 		.pixel_clock = 168000000,
+-		.link_freq = 1 /* an index in link_freq[] */
++		.link_freq = 1, /* an index in link_freq[] */
++		.max_fps = OV5645_30_FPS
+ 	},
+ 	{
+ 		.width = 2592,
+@@ -758,7 +791,8 @@ static const struct ov5645_mode_info ov5645_mode_info_data[] = {
+ 		.data = ov5645_setting_full,
+ 		.data_size = ARRAY_SIZE(ov5645_setting_full),
+ 		.pixel_clock = 168000000,
+-		.link_freq = 1 /* an index in link_freq[] */
++		.link_freq = 1, /* an index in link_freq[] */
++		.max_fps = OV5645_15_FPS
+ 	},
+ };
+ 
+@@ -855,6 +889,27 @@ static int ov5645_read_reg(struct ov5645 *ov5645, u16 reg, u8 *val)
+ 	return 0;
+ }
+ 
++static const struct ov5645_mode_info *
++ov5645_find_mode(struct ov5645 *sensor, enum ov5645_frame_rate fr,
++		 int width, int height, bool nearest)
++{
++	const struct ov5645_mode_info *mode;
++
++	mode = v4l2_find_nearest_size(ov5645_mode_info_data,
++			       ARRAY_SIZE(ov5645_mode_info_data),
++			       width, height,
++			       width, height);
++	if (!mode ||
++	    (!nearest && (mode->width != width || mode->height != height)))
++		return NULL;
++
++	/* Check to see if the current mode exceeds the max frame rate */
++	if (ov5645_framerates[fr] > ov5645_framerates[mode->max_fps])
++		return NULL;
++
++	return mode;
++}
++
+ static int ov5645_set_aec_mode(struct ov5645 *ov5645, u32 mode)
+ {
+ 	u8 val = ov5645->aec_pk_manual;
+@@ -983,6 +1038,49 @@ static int ov5645_s_power(struct v4l2_subdev *sd, int on)
+ 	return ret;
+ }
+ 
++static int ov5645_try_frame_interval(struct ov5645 *sensor,
++				     struct v4l2_fract *fi,
++				     u32 width, u32 height)
++{
++	const struct ov5645_mode_info *mode;
++	enum ov5645_frame_rate rate = OV5645_15_FPS;
++	int minfps, maxfps, best_fps, fps;
++	int i;
++
++	minfps = ov5645_framerates[OV5645_15_FPS];
++	maxfps = ov5645_framerates[OV5645_60_FPS];
++
++	if (fi->numerator == 0) {
++		fi->denominator = maxfps;
++		fi->numerator = 1;
++		rate = OV5645_60_FPS;
++		goto find_mode;
++	}
++
++	fps = clamp_val(DIV_ROUND_CLOSEST(fi->denominator, fi->numerator),
++			minfps, maxfps);
++
++	best_fps = minfps;
++	fps = clamp_val(DIV_ROUND_CLOSEST(fi->denominator, fi->numerator),
++			minfps, maxfps);
++
++	for (i = 0; i < ARRAY_SIZE(ov5645_framerates); i++) {
++		int curr_fps = ov5645_framerates[i];
++
++		if (abs(curr_fps - fps) < abs(best_fps - fps)) {
++			best_fps = curr_fps;
++			rate = i;
++		}
++	}
++
++	fi->numerator = 1;
++	fi->denominator = best_fps;
++
++find_mode:
++	mode = ov5645_find_mode(sensor, rate, width, height, false);
++	return mode ? rate : -EINVAL;
++}
++
+ static int ov5645_set_saturation(struct ov5645 *ov5645, s32 value)
+ {
+ 	u32 reg_value = (value * 0x10) + 0x40;
+@@ -1137,6 +1235,86 @@ static int ov5645_enum_frame_size(struct v4l2_subdev *subdev,
+ 	return 0;
+ }
+ 
++static int ov5645_enum_frame_interval(
++	struct v4l2_subdev *sd,
++	struct v4l2_subdev_pad_config *cfg,
++	struct v4l2_subdev_frame_interval_enum *fie)
++{
++	struct ov5645 *sensor = to_ov5645(sd);
++	struct v4l2_fract tpf;
++	int ret;
++
++	if (fie->pad != 0)
++		return -EINVAL;
++	if (fie->index >= OV5645_NUM_FRAMERATES)
++		return -EINVAL;
++
++	tpf.numerator = 1;
++	tpf.denominator = ov5645_framerates[fie->index];
++
++	ret = ov5645_try_frame_interval(sensor, &tpf,
++					fie->width, fie->height);
++	if (ret < 0)
++		return -EINVAL;
++
++	fie->interval = tpf;
++	return 0;
++}
++
++static int ov5645_g_frame_interval(struct v4l2_subdev *sd,
++				   struct v4l2_subdev_frame_interval *fi)
++{
++	struct ov5645 *sensor = to_ov5645(sd);
++
++	mutex_lock(&sensor->power_lock);
++	fi->interval = sensor->frame_interval;
++	mutex_unlock(&sensor->power_lock);
++
++	return 0;
++}
++
++static int ov5645_s_frame_interval(struct v4l2_subdev *sd,
++				   struct v4l2_subdev_frame_interval *fi)
++{
++	struct ov5645 *sensor = to_ov5645(sd);
++	const struct ov5645_mode_info *mode;
++	int frame_rate, ret = 0;
++
++	if (fi->pad != 0)
++		return -EINVAL;
++
++	mutex_lock(&sensor->power_lock);
++
++	if (sensor->streaming) {
++		ret = -EBUSY;
++		goto out;
++	}
++
++	mode = sensor->current_mode;
++
++	frame_rate = ov5645_try_frame_interval(sensor, &fi->interval,
++					       mode->width, mode->height);
++	if (frame_rate < 0)
++		frame_rate = OV5645_15_FPS;
++
++	mode = ov5645_find_mode(sensor, frame_rate, mode->width,
++				mode->height, true);
++	if (!mode) {
++		ret = -EINVAL;
++		goto out;
++	}
++
++	if (mode != sensor->current_mode ||
++	    frame_rate != sensor->current_fr) {
++		sensor->current_fr = frame_rate;
++		sensor->frame_interval = fi->interval;
++		sensor->current_mode = mode;
++	}
++out:
++	mutex_unlock(&sensor->power_lock);
++	return ret;
++}
++
+ static struct v4l2_mbus_framefmt *
+ __ov5645_get_pad_format(struct ov5645 *ov5645,
+ 			struct v4l2_subdev_pad_config *cfg,
+@@ -1283,6 +1461,8 @@ static int ov5645_s_stream(struct v4l2_subdev *subdev, int enable)
+ 				       OV5645_SYSTEM_CTRL0_START);
+ 		if (ret < 0)
+ 			return ret;
++
++		ov5645->streaming = enable;
+ 	} else {
+ 		ret = ov5645_write_reg(ov5645, OV5645_IO_MIPI_CTRL00, 0x40);
+ 		if (ret < 0)
+@@ -1302,6 +1482,8 @@ static const struct v4l2_subdev_core_ops ov5645_core_ops = {
+ };
+ 
+ static const struct v4l2_subdev_video_ops ov5645_video_ops = {
++	.g_frame_interval = ov5645_g_frame_interval,
++	.s_frame_interval = ov5645_s_frame_interval,
+ 	.s_stream = ov5645_s_stream,
+ };
+ 
+@@ -1312,6 +1494,7 @@ static const struct v4l2_subdev_pad_ops ov5645_subdev_pad_ops = {
+ 	.get_fmt = ov5645_get_format,
+ 	.set_fmt = ov5645_set_format,
+ 	.get_selection = ov5645_get_selection,
++	.enum_frame_interval = ov5645_enum_frame_interval,
+ };
+ 
+ static const struct v4l2_subdev_ops ov5645_subdev_ops = {
+-- 
+2.17.1
+
