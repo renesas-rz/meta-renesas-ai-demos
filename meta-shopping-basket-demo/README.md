@@ -277,7 +277,7 @@ setenv bootcmd 'ext4load mmc 0 0x48080000 Image-hihope-rzg2m.bin; ext4load mmc 0
 RZ/G2L:
 ```
 setenv bootargs 'rw root=/dev/mmcblk1p1 rootwait'
-setenv bootcmd 'ext4load mmc 0 0x48080000 Image-smarc-rzg2l; ext4load mmc 0 0x48000000 Image-r9a07g044l2-smarc.dtb; booti 0x48080000 - 0x48000000'
+setenv bootcmd 'ext4load mmc 0 0x48080000 Image-smarc-rzg2l.bin; ext4load mmc 0 0x48000000 Image-r9a07g044l2-smarc.dtb; booti 0x48080000 - 0x48000000'
 ```
 
 RZ/G2LC:
