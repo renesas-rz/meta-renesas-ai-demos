@@ -22,7 +22,7 @@ Supported Platforms:
 
 ## Build Instructions
 **Build machine dependencies**
-- Ubuntu 20.04 LTS (RZ/G2L) or Ubuntu 18.04 (RZ/G2E and RZ/G2M)
+- Ubuntu 20.04 LTS (RZ/G2L and RZ/G2LC) or Ubuntu 18.04 (RZ/G2E and RZ/G2M)
 - Installed packages: gawk wget git-core diffstat unzip texinfo gcc-multilib
 build-essential chrpath socat cpio python3 python3-pip python3-pexpect
 xz-utils debianutils iputils-ping python3-git python3-jinja2
