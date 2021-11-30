@@ -310,6 +310,14 @@ under.
 * Click "About->Exit" to close the application.
 * Click "Inference->Enable/Disable ArmNN Delegate" to enable or disable ArmNN
 Delegate during inference.
+* Click "Camera Settings->Enable/Disable Auto Gain" when using a supported MIPI
+CSI camera to enable or disable the automatic gain feature of the OV5645 sensor.
+* Click "Camera Settings->Enable/Disable Auto Exposure" when using a supported
+MIPI CSI camera to enable or disable the automatic exposure feature of the
+OV5645 sensor.
+* Click "Camera Settings->Enable/Disable Auto White Balance" when using a
+supported MIPI CSI camera to enable or disable the automatic white balance
+feature of the OV5645 sensor.
 
 Expected results:
 * Boxes are drawn around the detected items.
