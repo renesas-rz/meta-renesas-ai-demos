@@ -1,6 +1,146 @@
-include:
-  - project: spl2/continuous-integration/ci-pipelines
-    ref: master
-    file:
-      - /meta-renesas-ai-demos/main.yml
-      - /meta-renesas-ai-demos/jobs.yml
+stages:
+  - object-detection
+  - shopping-basket
+
+variables:
+  CI_META_RENESAS_MANIFEST_OD: bsp-rzg2__v1.0.4-update1.xml
+  CI_META_RENESAS_AI_REF_OD: refs/tags/v3.5.1
+  CI_META_RENESAS_MANIFEST_SB: bsp-rzg2__v1.0.8.xml
+  CI_META_RENESAS_AI_REF_SB: bfba8dd8644e681a7c065c40172ceb61999ea1cd
+  CI_META_RENESAS_MANIFEST_SB_2L: bsp-rzg2l__v1.3-update1-public.xml
+  CI_META_RENESAS_AI_DEMOS_REF: ${CI_COMMIT_REF_NAME}
+  CI_META_RENESAS_AI_DEMOS_CONFIGURATION: meta-${CI_demo_name}-demo/templates/${CI_MACHINE}
+  CI_DEMO_REPO: git@gitlab.renesas.solutions/spl2/machine-learning/rzg-foss-ai/rzg-${CI_demo_name}-demo-internal.git
+  CI_DEMO_REPO_PROTOCOL: ssh
+
+.object-detection:
+  stage: object-detection
+  variables:
+    CI_DEMO_NAME: OBJECT_DETECTION
+    CI_demo_name: object-detection
+    CI_META_RENESAS_AI_REF: ${CI_META_RENESAS_AI_REF_OD}
+
+.object-detection-rzg2:
+  extends: [.object-detection, .rzg2]
+  image: gitlab.renesas.solutions:5050/spl2/continuous-integration/dockerfiles:ubuntu-16.04-latest
+  variables:
+    CI_META_RENESAS_MANIFEST: ${CI_META_RENESAS_MANIFEST_OD}
+
+.shopping-basket:
+  stage: shopping-basket
+  needs: []
+  variables:
+    CI_DEMO_NAME: SHOPPING_BASKET
+    CI_demo_name: shopping-basket
+    CI_META_RENESAS_AI_REF: ${CI_META_RENESAS_AI_REF_SB}
+
+.shopping-basket-rzg2:
+  extends: [.shopping-basket, .rzg2]
+  image: gitlab.renesas.solutions:5050/spl2/continuous-integration/dockerfiles:ubuntu-18.04-latest
+  variables:
+    CI_META_RENESAS_MANIFEST: ${CI_META_RENESAS_MANIFEST_SB}
+
+.shopping-basket-rzg2l:
+  extends: [.shopping-basket, .smarc-rzg2l]
+  image: gitlab.renesas.solutions:5050/spl2/continuous-integration/dockerfiles:ubuntu-20.04-latest
+  variables:
+    CI_META_RENESAS_MANIFEST: ${CI_META_RENESAS_MANIFEST_SB_2L}
+
+.rzg2:
+  variables:
+    CI_GRAPHICS_LICENSE: prod
+    CI_SOC_FAMILY: rzg2
+
+.ek874:
+  variables:
+    CI_GRAPHICS_MACHINE: rzg2e-prod
+    CI_MACHINE: ek874
+
+.hihope-rzg2n:
+  variables:
+    CI_GRAPHICS_MACHINE: rzg2n-prod
+    CI_MACHINE: hihope-rzg2n
+
+.hihope-rzg2m:
+  variables:
+    CI_GRAPHICS_MACHINE: rzg2m-prod
+    CI_MACHINE: hihope-rzg2m
+
+.hihope-rzg2h:
+  variables:
+    CI_GRAPHICS_MACHINE: rzg2h-prod
+    CI_MACHINE: hihope-rzg2h
+
+.smarc-rzg2l:
+  variables:
+    CI_MACHINE: smarc-rzg2l
+    CI_SOC_FAMILY: rzg2l
+
+.smarc-rzg2lc:
+  variables:
+    CI_MACHINE: smarc-rzg2lc
+    CI_SOC_FAMILY: rzg2l
+
+.build_meta-renesas-ai-demos:
+  tags:
+    - yocto
+  variables:
+    GIT_STRATEGY: none
+    CI_SDK_NAME: ai-demos-sdk__${CI_JOB_NAME}.sh
+  before_script:
+    - if [ ${CI_COMMIT_TAG} ]; then CI_META_RENESAS_AI_DEMOS_REF=refs/tags/${CI_COMMIT_REF_NAME}; fi
+    - rm -rf build-scripts
+    - git clone git@gitlab.renesas.solutions:spl2/continuous-integration/build-scripts.git
+    - cd build-scripts
+    - PATH=$PATH:$(pwd)
+    - checkout-build-scripts.sh
+  script:
+    - ci-yocto-build.sh -s build-manifest__${CI_SOC_FAMILY}__meta-renesas-ai-demos__gitlab-ci.sh -p $(pwd)/build-scripts
+    - ls -l build/build/tmp/deploy/images/${CI_MACHINE}/
+    - ls -l build/build/tmp/deploy/sdk/
+  artifacts:
+    name: "${CI_JOB_NAME}-${CI_JOB_ID}"
+    when: always
+    expire_in: 1 month
+    paths:
+      - build-scripts/url_list.csv
+      - build-scripts/build/build/conf/bblayers.conf
+      - build-scripts/build/build/conf/local.conf
+
+################################################################################
+# OBJECT DETECTION DEMO
+# Build only (no automated testing)
+# Dev branches: Run all builds
+# Master: Run all builds
+# Tags: Run all builds
+################################################################################
+ek874_object-detection:
+  extends: [.build_meta-renesas-ai-demos, .object-detection-rzg2, .ek874]
+  when: manual
+
+hihope-rzg2m_object-detection:
+  extends: [.build_meta-renesas-ai-demos, .object-detection-rzg2, .hihope-rzg2m]
+  when: manual
+
+hihope-rzg2h_object-detection:
+  extends: [.build_meta-renesas-ai-demos, .object-detection-rzg2, .hihope-rzg2h]
+  when: manual
+
+################################################################################
+# SHOPPING BASKET DETECTION DEMO
+# Build only (no automated testing)
+# Dev branches: Run all builds
+# Master: Run all builds
+# Tags: Run all builds
+################################################################################
+hihope-rzg2m_shopping-basket:
+  extends: [.build_meta-renesas-ai-demos, .shopping-basket-rzg2, .hihope-rzg2m]
+
+smarc-rzg2l_shopping-basket:
+  extends: [.build_meta-renesas-ai-demos, .shopping-basket-rzg2l, .smarc-rzg2l]
+
+smarc-rzg2lc_shopping-basket:
+  extends: [.build_meta-renesas-ai-demos, .shopping-basket-rzg2l, .smarc-rzg2lc]
+
+ek874_shopping-basket:
+  extends: [.build_meta-renesas-ai-demos, .shopping-basket-rzg2, .ek874]
