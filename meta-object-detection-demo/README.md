@@ -167,7 +167,7 @@ sudo tar -xf core-image-qt-$PLATFORM.tar.gz -C /mnt/SD
 ### Add the Kernel Image and DTB
 Copy the Kernel Image and DTB to the boot directory in the root filesystem
 ```
-cp Image-$PLATFORM.bin Image-*.dtb /mnt/SD/boot/
+cp Image *.dtb /mnt/SD/boot/
 ```
 
 ### Using Wic Images
@@ -198,17 +198,17 @@ The U-Boot environment can be set from the U-boot terminal.
 For the RZ/G2H:
 ```
 setenv bootargs 'rw root=/dev/mmcblk0p1 rootwait'
-setenv bootcmd 'ext4load mmc 0 0x48080000 Image-hihope-rzg2h.bin; ext4load mmc 0 0x48000000 Image-r8a774e1-hihope-rzg2h-ex.dtb; booti 0x48080000 - 0x48000000'
+setenv bootcmd 'ext4load mmc 0 0x48080000 boot/Image; ext4load mmc 0 0x48000000 boot/r8a774e1-hihope-rzg2h-ex.dtb; booti 0x48080000 - 0x48000000'
 ```
 For the RZ/G2M:
 ```
 setenv bootargs 'rw root=/dev/mmcblk0p1 rootwait'
-setenv bootcmd 'ext4load mmc 0 0x48080000 Image-hihope-rzg2m.bin; ext4load mmc 0 0x48000000 Image-r8a774a1-hihope-rzg2m-ex.dtb; booti 0x48080000 - 0x48000000'
+setenv bootcmd 'ext4load mmc 0 0x48080000 boot/Image; ext4load mmc 0 0x48000000 boot/r8a774a1-hihope-rzg2m-ex.dtb; booti 0x48080000 - 0x48000000'
 ```
 For the RZ/G2E:
 ```
 setenv bootargs 'rw root=/dev/mmcblk0p1 rootwait'
-setenv bootcmd 'ext4load mmc 0 0x48080000 Image-ek874.bin; ext4load mmc 0 0x48000000 Image-r8a774c0-ek874.dtb; booti 0x48080000 - 0x48000000'
+setenv bootcmd 'ext4load mmc 0 0x48080000 boot/Image; ext4load mmc 0 0x48000000 boot/r8a774c0-ek874.dtb; booti 0x48080000 - 0x48000000'
 ```
 
 Finally, save the environment and boot:
