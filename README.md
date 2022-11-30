@@ -1,4 +1,12 @@
 # meta-renesas-ai-demos #
+
+**Please note that this repository is no longer maintained.**  
+Both demos are now available as modes in the new RZ Edge AI demo that can also
+be found on GitHub:  
+**https://github.com/renesas-rz/meta-rz-edge-ai-demo**
+
+---
+
 This OpenEmbedded/Yocto layer collector provides AI related demo support to the
 RZ/G series of platforms.
 
